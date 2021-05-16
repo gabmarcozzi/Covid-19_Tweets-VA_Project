@@ -23,20 +23,20 @@ var svg = d3.select("body")
     .attr("width", width)
     .attr("height", height)
     .append('g')
-    .attr('class', 'map');
+    .attr('class', 'map')
 
 var projection = d3.geoMercator()
     .scale(130)
-    .translate([width / 2, height / 1.5]);
+    .translate([width / 2, height / 1.5])
 
-var path = d3.geoPath().projection(projection);
+var path = d3.geoPath().projection(projection)
 
-svg.call(tip);
+svg.call(tip)
 
 queue()
     .defer(d3.json, "http://localhost:3000/world_countries.json")
     .defer(d3.tsv, "http://localhost:3000/world_population.tsv")
-    .await(ready);
+    .await(ready)
 
 function ready(error, data, population) {
     var populationById = {};
@@ -47,11 +47,11 @@ function ready(error, data, population) {
     console.log(data)
     console.log(data.features)
 
-    /*d3.select("#worldmap")
+    d3.select("#worldmap")
         .append("svg")
         .attr("class", "countries")
         .selectAll("path")
-        .data(data.features
+        .data(data.features)
         .enter().append("path")
         .attr("d", path)
         .style("fill", function(d) { return color(populationById[d.id]) })
@@ -76,13 +76,13 @@ function ready(error, data, population) {
                 .style("opacity", 0.8)
                 .style("stroke", "white")
                 .style("stroke-width", 0.3)
-        })*/
+        })
 
     d3.select("#worldmap")
         .append("svg")
         .append("path")
         .datum(topojson.mesh(data.features, function(a, b) { return a.id !== b.id }))
-        // .datum(topojson.mesh(data.features, function(a, b) { return a !== b; }))
+        // .datum(topojson.mesh(data.features, function(a, b) { return a !== b }))
         .attr("class", "names")
         .attr("d", path)
 }
