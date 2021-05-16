@@ -9,8 +9,8 @@ var tip = d3.tip()
     })
 
 var margin = { top: 0, right: 0, bottom: 0, left: 0 },
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = d3.select("#worldmap").node().getBoundingClientRect().width - margin.left - margin.right,
+    height = d3.select("#worldmap").node().getBoundingClientRect().height - margin.top - margin.bottom;
 
 var color = d3.scaleThreshold()
     .domain([10000, 100000, 500000, 1000000, 5000000, 10000000, 50000000, 100000000, 500000000, 1500000000])
@@ -18,7 +18,7 @@ var color = d3.scaleThreshold()
 
 var path = d3.geoPath();
 
-var svg = d3.select("body")
+var svg = d3.select("#worldmap")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -26,8 +26,8 @@ var svg = d3.select("body")
     .attr('class', 'map')
 
 var projection = d3.geoMercator()
-    .scale(130)
-    .translate([width / 2, height / 1.5])
+    .scale(100)
+    .translate([width / 2, height / 2])
 
 var path = d3.geoPath().projection(projection)
 
@@ -44,11 +44,7 @@ function ready(error, data, population) {
     population.forEach(function(d) { populationById[d.id] = +d.population })
     data.features.forEach(function(d) { d.population = populationById[d.id] })
 
-    console.log(data)
-    console.log(data.features)
-
-    d3.select("#worldmap")
-        .append("svg")
+    svg
         .attr("class", "countries")
         .selectAll("path")
         .data(data.features)
@@ -78,8 +74,7 @@ function ready(error, data, population) {
                 .style("stroke-width", 0.3)
         })
 
-    d3.select("#worldmap")
-        .append("svg")
+    svg
         .append("path")
         .datum(topojson.mesh(data.features, function(a, b) { return a.id !== b.id }))
         // .datum(topojson.mesh(data.features, function(a, b) { return a !== b }))
