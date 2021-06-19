@@ -19,6 +19,7 @@
     <title>Covid-19 Tweets</title>
     <link rel="stylesheet" href="src/css/main.css">
     <link rel="stylesheet" href="src/css/worldmap.css">
+    <link rel="stylesheet" href="src/css/trendPlotForNations/index.css">
 
 </head>
 
@@ -30,7 +31,7 @@
     <div class="row m-0 h-95" style="background-color: gray">
         <div class="col-7 p-0">
             <div id="worldmap" class="h-70">
-                <script src="./src/js/worldmap.js"></script>
+                <!-- <script src="./src/js/worldmap.js"></script> -->
             </div>
             <div class="h-30">
                 TIME TREND PLOT
@@ -38,8 +39,8 @@
         </div>
 
         <div class="col-5 p-0">
-            <div class="h-60">
-                TREND PLOT FOR NATIONS
+            <div id="nationsTrendPlot" class="h-60">
+                <script src="./src/js/trendPlotForNations/plot.js"></script>
             </div>
             <div class="row m-0 h-40">
                 <div class="col-6 p-0 h-100">
