@@ -24,7 +24,7 @@ const nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("div")
     .classed("svg-container", true)
     .append("svg")
-    .attr("preserveAspectRatio", "xMinYMin meet")
+    //.attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "0 0 800 552")
     // Class to make it responsive.
     .classed("svg-content-responsive", true)
