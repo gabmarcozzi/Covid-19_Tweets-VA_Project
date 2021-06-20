@@ -3,21 +3,38 @@
 }
 
 .h-60 {
-    height:60%
+    height: 60%
 }
 
 .h-40 {
-    height:40%
+    height: 40%
 }
 
 .h-70 {
-    height:70%
+    height: 70%
 }
 
 .h-30 {
-    height:30%
+    height: 30%
 }
 
 .h-95 {
-    height:95%
+    height: 95%
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
