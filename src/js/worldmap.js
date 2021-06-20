@@ -18,16 +18,20 @@ var color = d3.scaleThreshold()
 
 var path = d3.geoPath();
 
-var svg = d3.select("#worldmap")
+var svg = d3.select("#worldmap") 
     .append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", "100%")
+    .attr("height", "100%")
+    //.attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 1143 812")
     .append('g')
     .attr('class', 'map')
+    
+    
 
 var projection = d3.geoMercator()
-    .scale(100)
-    .translate([width / 2, height / 2])
+    .scale(190)
+    .translate([width / 2.5, height/ 1.45])
 
 var path = d3.geoPath().projection(projection)
 
