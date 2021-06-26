@@ -50,7 +50,6 @@ function ready(error, data, tweets) {
         else 
             tweetsByCountryId[t.country_id] = [t]
     })
-    console.log(tweetsByCountryId)
 
     data.features.forEach(f => {
         if(!tweetsByCountryId[f.id])
@@ -83,6 +82,7 @@ function ready(error, data, tweets) {
         .data(data.features)
         .enter().append("path")
         .attr("d", path)
+        .attr('id', function(d) {return `map-${d.id}`})
         .style("fill", function(d) { return color(tweetsByCountryId[d.id].length) })
         .style('stroke', 'white')
         .style('stroke-width', 1.5)
@@ -114,16 +114,23 @@ function ready(error, data, tweets) {
         .on("click", function(d) {
             if(clicked.includes(d)) {
                 delete clicked[clicked.indexOf(d)]
-                d3.select(this)
+                d3.select(`#map-${d.id}`)
                 .style("opacity", 0.8)
                 .style("stroke", "white")
                 .style("stroke-width", 0.3)
+
+                d3.select(`#trend-${d.id}`)
+                .style("stroke", "steelblue")
             }
             else {
                 clicked.push(d)
-                d3.select(this)
+
+                d3.select(`#map-${d.id}`)
                 .style("stroke", "yellow")
                 .style("stroke-width", 3)
+
+                d3.select(`#trend-${d.id}`)
+                .style("stroke", "yellow")
             }
                 
         })
