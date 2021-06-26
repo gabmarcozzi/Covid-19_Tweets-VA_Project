@@ -98,7 +98,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
-        console.log(value)
+        //console.log(value)
         // Add the valueline path.
         nationsTrendPlot.append("path")
         .data([value])
