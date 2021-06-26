@@ -1,12 +1,57 @@
+<!-- IMPORTS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="src/js/d3-tip.js"></script>
+<script src="src/js/script.js"></script>
+
+
+
+<!-- START OF THE PAGE -->
 <html>
-  <head>
+
+<head>
     <title>Covid-19 Tweets</title>
     <link rel="stylesheet" href="src/css/main.css">
-  </head>
-  <body>
-    <h3>Today is a beautiful day!!</h3>
+    <link rel="stylesheet" href="src/css/worldmap.css">
+    <link rel="stylesheet" href="src/css/trendPlotForNations/index.css">
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="src/js/script.js"></script>
-  </body>
+</head>
+
+<body>
+    <div class="header w-100 h-5">
+        <h1>HEADER</h1>
+    </div>
+
+    <div class="row m-0 h-95" style="background-color: gray">
+        <div class="col-7 p-0">
+            <div id="worldmap" class="h-70" style="background-color: gray">
+                <script src="./src/js/worldmap.js"></script>
+            </div>
+            <div class="h-30">
+                TIME TREND PLOT
+            </div>
+        </div>
+
+        <div class="col-5 p-0">
+            <div id="nationsTrendPlot" class="h-60">
+                <script src="./src/js/trendPlotForNations/plot.js"></script>
+            </div>
+            <div class="row m-0 h-40">
+                <div class="col-6 p-0 h-100">
+                    PCA
+                </div>
+                <div class="col-6 p-0 h-100">
+                    WORLD CLOUD
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
