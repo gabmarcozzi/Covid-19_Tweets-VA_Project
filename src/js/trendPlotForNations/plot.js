@@ -66,185 +66,6 @@ const sortByDate = ((a, b) => {
 });
 //#endregion
 
-const idToNation = {
-    '-99': "Northern Cyprus",
-    ABV: "Somaliland",
-    AFG: "Afghanistan",
-    AGO: "Angola",
-    ALB: "Albania",
-    ARE: "United Arab Emirates",
-    ARG: "Argentina",
-    ARM: "Armenia",
-    ATF: "French Southern and Antarctic Lands",
-    AUS: "Australia",
-    AUT: "Austria",
-    AZE: "Azerbaijan",
-    BDI: "Burundi",
-    BEL: "Belgium",
-    BEN: "Benin",
-    BFA: "Burkina Faso",
-    BGD: "Bangladesh",
-    BGR: "Bulgaria",
-    BHS: "The Bahamas",
-    BIH: "Bosnia and Herzegovina",
-    BLR: "Belarus",
-    BLZ: "Belize",
-    BOL: "Bolivia",
-    BRA: "Brazil",
-    BRN: "Brunei",
-    BTN: "Bhutan",
-    BWA: "Botswana",
-    CAF: "Central African Republic",
-    CAN: "Canada",
-    CHE: "Switzerland",
-    CHL: "Chile",
-    CHN: "China",
-    CIV: "Ivory Coast",
-    CMR: "Cameroon",
-    COD: "Democratic Republic of the Congo",
-    COG: "Republic of the Congo",
-    COL: "Colombia",
-    CRI: "Costa Rica",
-    CUB: "Cuba",
-    CYP: "Cyprus",
-    CZE: "Czech Republic",
-    DEU: "Germany",
-    DJI: "Djibouti",
-    DNK: "Denmark",
-    DOM: "Dominican Republic",
-    DZA: "Algeria",
-    ECU: "Ecuador",
-    EGY: "Egypt",
-    ERI: "Eritrea",
-    ESH: "Western Sahara",
-    ESP: "Spain",
-    EST: "Estonia",
-    ETH: "Ethiopia",
-    FIN: "Finland",
-    FJI: "Fiji",
-    FLK: "Falkland Islands",
-    FRA: "France",
-    GAB: "Gabon",
-    GBR: "England",
-    GEO: "Georgia",
-    GHA: "Ghana",
-    GIN: "Guinea",
-    GMB: "Gambia",
-    GNB: "Guinea Bissau",
-    GNQ: "Equatorial Guinea",
-    GRC: "Greece",
-    GRL: "Greenland",
-    GTM: "Guatemala",
-    GUY: "Guyana",
-    HND: "Honduras",
-    HRV: "Croatia",
-    HTI: "Haiti",
-    HUN: "Hungary",
-    IDN: "Indonesia",
-    IND: "India",
-    IRL: "Ireland",
-    IRN: "Iran",
-    IRQ: "Iraq",
-    ISL: "Iceland",
-    ISR: "Israel",
-    ITA: "Italy",
-    JAM: "Jamaica",
-    JOR: "Jordan",
-    JPN: "Japan",
-    KAZ: "Kazakhstan",
-    KEN: "Kenya",
-    KGZ: "Kyrgyzstan",
-    KHM: "Cambodia",
-    KOR: "South Korea",
-    KWT: "Kuwait",
-    LAO: "Laos",
-    LBN: "Lebanon",
-    LBR: "Liberia",
-    LBY: "Libya",
-    LKA: "Sri Lanka",
-    LSO: "Lesotho",
-    LTU: "Lithuania",
-    LUX: "Luxembourg",
-    LVA: "Latvia",
-    MAR: "Morocco",
-    MDA: "Moldova",
-    MDG: "Madagascar",
-    MEX: "Mexico",
-    MKD: "Macedonia",
-    MLI: "Mali",
-    MMR: "Myanmar",
-    MNE: "Montenegro",
-    MNG: "Mongolia",
-    MOZ: "Mozambique",
-    MRT: "Mauritania",
-    MWI: "Malawi",
-    MYS: "Malaysia",
-    NAM: "Namibia",
-    NCL: "New Caledonia",
-    NER: "Niger",
-    NGA: "Nigeria",
-    NIC: "Nicaragua",
-    NLD: "Netherlands",
-    NOR: "Norway",
-    NPL: "Nepal",
-    NZL: "New Zealand",
-    OMN: "Oman",
-    OSA: "Kosovo",
-    PAK: "Pakistan",
-    PAN: "Panama",
-    PER: "Peru",
-    PHL: "Philippines",
-    PNG: "Papua New Guinea",
-    POL: "Poland",
-    PRI: "Puerto Rico",
-    PRK: "North Korea",
-    PRT: "Portugal",
-    PRY: "Paraguay",
-    PSE: "West Bank",
-    QAT: "Qatar",
-    ROU: "Romania",
-    RUS: "Russia",
-    RWA: "Rwanda",
-    SAU: "Saudi Arabia",
-    SDN: "Sudan",
-    SDS: "South Sudan",
-    SEN: "Senegal",
-    SLB: "Solomon Islands",
-    SLE: "Sierra Leone",
-    SLV: "El Salvador",
-    SOM: "Somalia",
-    SRB: "Republic of Serbia",
-    SUR: "Suriname",
-    SVK: "Slovakia",
-    SVN: "Slovenia",
-    SWE: "Sweden",
-    SWZ: "Swaziland",
-    SYR: "Syria",
-    TCD: "Chad",
-    TGO: "Togo",
-    THA: "Thailand",
-    TJK: "Tajikistan",
-    TKM: "Turkmenistan",
-    TLS: "East Timor",
-    TTO: "Trinidad and Tobago",
-    TUN: "Tunisia",
-    TUR: "Turkey",
-    TWN: "Taiwan",
-    TZA: "United Republic of Tanzania",
-    UGA: "Uganda",
-    UKR: "Ukraine",
-    URY: "Uruguay",
-    USA: "USA",
-    UZB: "Uzbekistan",
-    VEN: "Venezuela",
-    VNM: "Vietnam",
-    VUT: "Vanuatu",
-    YEM: "Yemen",
-    ZAF: "South Africa",
-    ZMB: "Zambia",
-    ZWE: "Zimbabwe"
-}
-
 // Get the data
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
@@ -284,6 +105,10 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
+
+        // Define the selectNation method
+        const selectNationForTrend = () => selectNation(key)
+        
         // Add the valueline path.
         nationsTrendPlot.append("path")
             .data([value])
@@ -291,7 +116,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .attr("id", `trend-${key}`)
             .attr("d", valueline)
             .on('mouseover', () => {
-                // Get mouse coordinates
+                // Get mouse coordinates TODO: tooltip near to the mouse
                 const x = d3.event.pageX - document.getElementById('nationsTrendPlot').getBoundingClientRect().x + 10
                 const y = d3.event.pageX - document.getElementById('nationsTrendPlot').getBoundingClientRect().y + 10
                 nationTooltip.show(idToNation[key])
@@ -299,6 +124,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .on('mouseout', () => {
                 nationTooltip.hide(key)
             })
+            .on("click", selectNationForTrend)
     })
 
     // Add the X Axis
@@ -309,5 +135,12 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
+
+
+    // at the start of the webapp select all the nations that are in selectedNation
+    selectedNations.forEach(nation => {
+        d3.select(`#trend-${nation}`)
+            .style("stroke", "rgb(70, 130, 180)")
+    })
 
 })

@@ -74,7 +74,8 @@ function ready(error, data, tweets) {
     //population.forEach(function(d) { populationById[d.id] = +d.population })
     //data.features.forEach(function(d) { d.population = tweetsByCountryId[d.id] })
 
-    var clicked = []
+    // Define the selectNation method
+    const selectNationForMap = function(d) {selectNation(d.id)}
 
     svg
         .attr("class", "countries")
@@ -93,7 +94,7 @@ function ready(error, data, tweets) {
         .on('mouseover', function(d) {
             tip.show(d);
 
-            if(!clicked.includes(d)) {
+            if(!selectedNations.includes(d.id)) {
                 d3.select(this)
                 .style("opacity", 1)
                 .style("stroke", "white")
@@ -104,36 +105,14 @@ function ready(error, data, tweets) {
         .on('mouseout', function(d) {
             tip.hide(d);
 
-            if(!clicked.includes(d)) {
+            if(!selectedNations.includes(d.id)) {
                 d3.select(this)
                 .style("opacity", 0.8)
                 .style("stroke", "white")
                 .style("stroke-width", 0.3)
             }
         })
-        .on("click", function(d) {
-            if(clicked.includes(d)) {
-                delete clicked[clicked.indexOf(d)]
-                d3.select(`#map-${d.id}`)
-                .style("opacity", 0.8)
-                .style("stroke", "white")
-                .style("stroke-width", 0.3)
-
-                d3.select(`#trend-${d.id}`)
-                .style("stroke", "steelblue")
-            }
-            else {
-                clicked.push(d)
-
-                d3.select(`#map-${d.id}`)
-                .style("stroke", "yellow")
-                .style("stroke-width", 3)
-
-                d3.select(`#trend-${d.id}`)
-                .style("stroke", "yellow")
-            }
-                
-        })
+        .on("click", selectNationForMap)
 
     svg
         .append("path")
@@ -141,4 +120,11 @@ function ready(error, data, tweets) {
         // .datum(topojson.mesh(data.features, function(a, b) { return a !== b }))
         .attr("class", "names")
         .attr("d", path)
+
+    // at the start of the webapp select all the nations contained in selectedNations
+    selectedNations.forEach(function(nation) {
+        d3.select(`#map-${nation}`)
+                .style("stroke", "yellow")
+                .style("stroke-width", 3)
+    })
 }

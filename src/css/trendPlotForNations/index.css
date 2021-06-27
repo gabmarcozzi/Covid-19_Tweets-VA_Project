@@ -1,5 +1,5 @@
 .line {
     fill: none;
-    stroke: steelblue;
+    stroke: rgba(70, 130, 180, 0.2);
     stroke-width: 3px;
 }
