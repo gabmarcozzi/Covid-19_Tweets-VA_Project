@@ -2,12 +2,6 @@ const nationsTrendMargin = { top: 20, right: 50, bottom: 50, left: 50 },
     nationsTrendWidth = d3.select("#nationsTrendPlot").node().getBoundingClientRect().width - nationsTrendMargin.left - nationsTrendMargin.right,
     nationsTrendHeight = d3.select("#nationsTrendPlot").node().getBoundingClientRect().height - nationsTrendMargin.top - nationsTrendMargin.bottom
 
-const timeGrain = 'month'
-// parse the date / time
-let parseTime
-if (timeGrain === 'month') parseTime = d3.timeParse("%b-%Y")
-else parseTime = d3.timeParse("%d-%b-%Y")
-
 // initialize tooltips
 const nationTooltip = d3.tip()
     .attr('class', 'd3-tip')
@@ -27,44 +21,21 @@ const valueline = d3.line()
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
 const nationsTrendPlot = d3.select("#nationsTrendPlot")
-    .append("div")
-    .classed("svg-container", true)
+    //.append("div")
+    //.classed("svg-container", true)
     .append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
     //.attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "0 0 800 552")
     // Class to make it responsive.
-    .classed("svg-content-responsive", true)
+    //.classed("svg-content-responsive", true)
     .append("g")
     .attr("transform",
         "translate(" + nationsTrendMargin.left + "," + nationsTrendMargin.top + ")")
 
 // associate tooltips to this plot
 nationsTrendPlot.call(nationTooltip)
-
-//#region Helper Functions
-const aggregateForPeriod = (data, timeRange) => {
-    // Iterate through data
-    return data.reduce((timeDict, d) => {
-        // Split date in chunks and take the desired timestep
-        const timeChunks = d['created_at'].split(' ')
-        let timeStep
-        switch (timeRange) {
-            case 'day':
-                timeStep = [timeChunks[2], timeChunks[1], timeChunks[5]].join('-')
-            default:
-                timeStep = [timeChunks[1], timeChunks[5]].join('-')
-        }
-        if (timeDict[timeStep]) timeDict[timeStep] += 1
-        else timeDict[timeStep] = 1
-
-        return timeDict
-    }, {})
-}
-
-const sortByDate = ((a, b) => {
-    return new Date(b['date']) - new Date(a['date']);
-});
-//#endregion
 
 // Get the data
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
@@ -85,6 +56,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     dataPaths = {}
 
     Object.entries(perNationTweetCount).forEach(([nation, data]) => {
+        //console.log(data)
         const perPeriodData = aggregateForPeriod(data, timeGrain)
         const perPeriodValues = Object.entries(perPeriodData).map(([time, count]) => ({
             date: parseTime(time),

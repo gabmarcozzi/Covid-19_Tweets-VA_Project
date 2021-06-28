@@ -212,3 +212,33 @@ const selectNation = (key) => {
     }
         
 }
+
+const timeGrain = 'month'
+// parse the date / time
+let parseTime
+if (timeGrain === 'month') parseTime = d3.timeParse("%b-%Y")
+else parseTime = d3.timeParse("%d-%b-%Y")
+
+//#region Helper Functions
+const aggregateForPeriod = (data, timeRange) => {
+    // Iterate through data
+    return data.reduce((timeDict, d) => {
+        // Split date in chunks and take the desired timestep
+        const timeChunks = d['created_at'].split(' ')
+        let timeStep
+        switch (timeRange) {
+            case 'day':
+                timeStep = [timeChunks[2], timeChunks[1], timeChunks[5]].join('-')
+            default:
+                timeStep = [timeChunks[1], timeChunks[5]].join('-')
+        }
+        if (timeDict[timeStep]) timeDict[timeStep] += 1
+        else timeDict[timeStep] = 1
+
+        return timeDict
+    }, {})
+}
+
+const sortByDate = ((a, b) => {
+    return new Date(b['date']) - new Date(a['date']);
+});
