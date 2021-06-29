@@ -28,12 +28,10 @@ const valueline = d3.line()
 // moves the 'group' element to the top left margin
 const nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("div")
-    .classed("svg-container", true)
     .append("svg")
-    //.attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("width", "100%")
+    .attr("height", "100%")
     .attr("viewBox", "0 0 800 552")
-    // Class to make it responsive.
-    .classed("svg-content-responsive", true)
     .append("g")
     .attr("transform",
         "translate(" + nationsTrendMargin.left + "," + nationsTrendMargin.top + ")")
