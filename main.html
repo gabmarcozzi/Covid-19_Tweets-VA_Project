@@ -9,6 +9,8 @@
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="src/js/d3-tip.js"></script>
 <script src="src/js/common.js"></script>
+<!-- Load d3-cloud -->
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
 
 
 
@@ -40,14 +42,14 @@
 
         <div class="col-5 p-0">
             <div id="nationsTrendPlot" class="h-60">
-                <script src="./src/js/trendPlotForNations/plot.js"></script>
+                <script src="./src/js/trendPlotForNations/index.js"></script>
             </div>
             <div class="row m-0 h-40">
                 <div class="col-6 p-0 h-100">
                     PCA
                 </div>
-                <div class="col-6 p-0 h-100">
-                    WORLD CLOUD
+                <div id="wordcloud" class="col-6 p-0 h-100">
+                    <script src="./src/js/wordCloud/index.js"></script>
                 </div>
             </div>
         </div>

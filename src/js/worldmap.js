@@ -11,7 +11,7 @@ var tip = d3.tip()
 
 var margin = { top: 0, right: 0, bottom: 0, left: 0 },
     width = d3.select("#worldmap").node().getBoundingClientRect().width - margin.left - margin.right,
-    height = d3.select("#worldmap").node().getBoundingClientRect().height - margin.top - margin.bottom;
+    height = d3.select("#worldmap").node().getBoundingClientRect().height - margin.top - margin.bottom
 
 var color = d3.scaleThreshold()
     .domain([10, 50, 100, 300, 500, 1000, 2000, 5000, 10000, 20000])
@@ -39,7 +39,6 @@ svg.call(tip)
 queue()
     .defer(d3.json, "http://localhost:3000/world_countries.json")
     .defer(d3.csv, "http://localhost:3000/covidTweetsDataset.csv")
-    //.defer(d3.tsv, "http://localhost:3000/world_population.tsv")
     .await(ready)
 
 function ready(error, data, tweets) {
