@@ -11,6 +11,11 @@
 <script src="src/js/common.js"></script>
 <!-- Load d3-cloud -->
 <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+<!-- MOMENT-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+<!-- MDS -->
+<script src="https://unpkg.com/@saehrimnir/druidjs"></script>
+
 
 
 
@@ -45,8 +50,8 @@
                 <script src="./src/js/trendPlotForNations/index.js"></script>
             </div>
             <div class="row m-0 h-40">
-                <div class="col-6 p-0 h-100">
-                    PCA
+                <div id="mds" class="col-6 p-0 h-100">
+                    <script src="./src/js/mds/index.js"></script>
                 </div>
                 <div id="wordcloud" class="col-6 p-0 h-100">
                     <script src="./src/js/wordCloud/index.js"></script>
