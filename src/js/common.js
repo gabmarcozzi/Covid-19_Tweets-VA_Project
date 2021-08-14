@@ -194,7 +194,7 @@ const selectNation = (key) => {
         d3.select(`#trend-${key}`)
         .transition()
         .duration(500)
-        .style("stroke", "rgba(70, 130, 180, 0.2)")
+        .style("stroke", "rgba(29, 161, 242, 0.2)")
     }
     else {
         selectedNations.push(key)
@@ -208,7 +208,7 @@ const selectNation = (key) => {
         d3.select(`#trend-${key}`)
         .transition()
         .duration(500)
-        .style("stroke", "rgb(70, 130, 180)")
+        .style("stroke", "rgb(29, 161, 242)")
     }
         
 }
@@ -644,3 +644,22 @@ const stopWords = {
     'yours': 1,
     'z': 1
 }
+
+window.onload = () => {
+    document.getElementById("loadedPage").style.display = "block"
+    document.getElementById("loadedPage").style.display = "none"
+    document.getElementById("loader").style.display = "block"
+}
+
+let loadedViews = 0
+
+// loading view
+window.addEventListener('loaded', event => {
+    loadedViews += 1
+    if(loadedViews === 4) {
+        loadedViews = 0
+        console.log('loaded')
+        document.getElementById("loader").style.display = "none"
+        document.getElementById("loadedPage").style.display = "block"
+    }
+}, false)

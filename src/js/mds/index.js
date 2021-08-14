@@ -41,13 +41,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
   const cutMatrix = tweetsMatrix.slice(0, 5000)
 
-  console.log(cutMatrix)
-
   const druidMDS = new druid.MDS(cutMatrix)
 
   const druidReducedMatrix = druidMDS.transform() 
-
-  console.log(druidReducedMatrix)
 
   mdsSvg.append('g')
         .selectAll("dot")
@@ -57,5 +53,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .attr("cx", d => mdsX(d[0]))
         .attr("cy", d => mdsY(d[1]))
         .attr("r", 2)
-        .style("fill", "blue")
+        .style("fill", "#1DA1F2")
+
+  // plot loaded notification
+  const loaded = new Event('loaded')
+  window.dispatchEvent(loaded)
 })

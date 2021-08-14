@@ -126,4 +126,8 @@ function ready(error, data, tweets) {
                 .style("stroke", "yellow")
                 .style("stroke-width", 3)
     })
+
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
 }

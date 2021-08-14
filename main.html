@@ -23,7 +23,7 @@
 <html>
 
 <head>
-    <title>Covid-19 Tweets</title>
+    <title>Covid-19 Tweets 2020-2021</title>
     <link rel="stylesheet" href="src/css/main.css">
     <link rel="stylesheet" href="src/css/worldmap.css">
     <link rel="stylesheet" href="src/css/trendPlotForNations/index.css">
@@ -31,30 +31,43 @@
 </head>
 
 <body>
-    <div class="header w-100 h-5">
-        <h1>HEADER</h1>
-    </div>
-
-    <div class="row m-0 h-95" style="background-color: gray">
-        <div class="col-7 p-0">
-            <div id="worldmap" class="h-70" style="background-color: gray">
-                <script src="./src/js/worldmap.js"></script>
-            </div>
-            <div class="h-30">
-                TIME TREND PLOT
-            </div>
+    <div id="loader">
+        <div class="header w-100 h-10 row">
+            <h1 class="title">#Covid-19 Tweets 2020-2021</h1>
+            <img src="./images/twitterLogo.svg" class="logo"></img>
         </div>
-
-        <div class="col-5 p-0">
-            <div id="nationsTrendPlot" class="h-60">
-                <script src="./src/js/trendPlotForNations/index.js"></script>
-            </div>
-            <div class="row m-0 h-40">
-                <div id="mds" class="col-6 p-0 h-100">
-                    <script src="./src/js/mds/index.js"></script>
+        <div class="loader-container">
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+    <div id="loadedPage">
+        <div class="header w-100 h-10 row">
+            <h1 class="title">#Covid-19 Tweets 2020-2021</h1>
+            <img src="./images/twitterLogo.svg" class="logo"></img>
+        </div>
+    
+        <div class="row m-0 h-95" style="background-color: #657786">
+            <div class="col-7 p-0">
+                <div id="worldmap" class="h-70">
+                    <script src="./src/js/worldmap.js"></script>
                 </div>
-                <div id="wordcloud" class="col-6 p-0 h-100">
-                    <script src="./src/js/wordCloud/index.js"></script>
+                <div class="h-30">
+                    TIME TREND PLOT
+                </div>
+            </div>
+    
+            <div class="col-5 p-0">
+                <div id="nationsTrendPlot" class="h-60">
+                    <script src="./src/js/trendPlotForNations/index.js"></script>
+                </div>
+                <div class="row m-0 h-40">
+                    <div id="mds" class="col-6 p-0 h-100">
+                        <script src="./src/js/mds/index.js"></script>
+                    </div>
+                    <div id="wordcloud" class="col-6 p-0 h-100">
+                        <script src="./src/js/wordCloud/index.js"></script>
+                    </div>
                 </div>
             </div>
         </div>

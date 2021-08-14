@@ -138,7 +138,10 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach(nation => {
         d3.select(`#trend-${nation}`)
-            .style("stroke", "rgb(70, 130, 180)")
+            .style("stroke", "#1DA1F2")
     })
 
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
 })
