@@ -4,8 +4,7 @@ var tweetsByCountryId = {};
 // Set tooltips
 var tip = d3.tip()
     .attr('class', 'd3-tip')
-    .offset([-10, 0])
-    .html(function(d) {
+    .html(function (d) {
         return "<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong># of Tweets: </strong><span class='details'>" + format(tweetsByCountryId[d.id].length) + "</span>";
     })
 
@@ -19,18 +18,17 @@ var color = d3.scaleThreshold()
 
 var path = d3.geoPath();
 
-var svg = d3.select("#worldmap") 
+var svg = d3.select("#worldmap")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
-    //.attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "0 0 1143 812")
     .append('g')
     .attr('class', 'map')
 
 var projection = d3.geoMercator()
     .scale(190)
-    .translate([width / 2.1, height/ 1.15])
+    .translate([width / 2.1, height / 1.15])
 
 var path = d3.geoPath().projection(projection)
 
@@ -44,14 +42,14 @@ queue()
 function ready(error, data, tweets) {
 
     tweets.forEach(t => {
-        if(tweetsByCountryId[t.country_id])
+        if (tweetsByCountryId[t.country_id])
             tweetsByCountryId[t.country_id].push(t)
-        else 
+        else
             tweetsByCountryId[t.country_id] = [t]
     })
 
     data.features.forEach(f => {
-        if(!tweetsByCountryId[f.id])
+        if (!tweetsByCountryId[f.id])
             tweetsByCountryId[f.id] = []
     })
     // tweets.forEach(t => {
@@ -63,18 +61,31 @@ function ready(error, data, tweets) {
     //                 // else 
     //                 //     tweetsById[f.id] = [t]
     //                 console.log("ciao")
-                    
+
     //             }
     //         })
     //     })
     // })
 
-        
+
     //population.forEach(function(d) { populationById[d.id] = +d.population })
     //data.features.forEach(function(d) { d.population = tweetsByCountryId[d.id] })
 
     // Define the selectNation method
-    const selectNationForMap = function(d) {selectNation(d.id)}
+    const selectNationForMap = function (d) { selectNation(d.id) }
+
+    const mouseEventHandler = (event) => {
+        const mousePosX = event.clientX
+        const mousePosY = event.clientY
+        const halfRectHeight = document.getElementById('worldmap').getBoundingClientRect().height/2
+
+        if(mousePosY < halfRectHeight) {
+            tip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, 20%);`)
+        }
+        else {
+            tip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, -120%);`)
+        }
+    }
 
     svg
         .attr("class", "countries")
@@ -82,49 +93,55 @@ function ready(error, data, tweets) {
         .data(data.features)
         .enter().append("path")
         .attr("d", path)
-        .attr('id', function(d) {return `map-${d.id}`})
-        .style("fill", function(d) { return color(tweetsByCountryId[d.id].length) })
+        .attr('id', function (d) { return `map-${d.id}` })
+        .style("fill", function (d) { return color(tweetsByCountryId[d.id].length) })
         .style('stroke', 'white')
         .style('stroke-width', 1.5)
         .style("opacity", 0.8)
         // tooltips
         .style("stroke", "white")
         .style('stroke-width', 0.3)
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
+
+            document.addEventListener('mousemove', mouseEventHandler, true)
+
             tip.show(d);
 
-            if(!selectedNations.includes(d.id)) {
+            if (!selectedNations.includes(d.id)) {
                 d3.select(this)
-                .style("opacity", 1)
-                .style("stroke", "white")
-                .style("stroke-width", 3)
+                    .style("opacity", 1)
+                    .style("stroke", "white")
+                    .style("stroke-width", 3)
             }
-            
+
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
+
             tip.hide(d);
 
-            if(!selectedNations.includes(d.id)) {
+            document.removeEventListener('mousemove', mouseEventHandler, true)
+
+            if (!selectedNations.includes(d.id)) {
                 d3.select(this)
-                .style("opacity", 0.8)
-                .style("stroke", "white")
-                .style("stroke-width", 0.3)
+                    .style("opacity", 0.8)
+                    .style("stroke", "white")
+                    .style("stroke-width", 0.3)
             }
         })
         .on("click", selectNationForMap)
 
     svg
         .append("path")
-        .datum(topojson.mesh(data.features, function(a, b) { return a.id !== b.id }))
+        .datum(topojson.mesh(data.features, function (a, b) { return a.id !== b.id }))
         // .datum(topojson.mesh(data.features, function(a, b) { return a !== b }))
         .attr("class", "names")
         .attr("d", path)
 
     // at the start of the webapp select all the nations contained in selectedNations
-    selectedNations.forEach(function(nation) {
+    selectedNations.forEach(function (nation) {
         d3.select(`#map-${nation}`)
-                .style("stroke", "yellow")
-                .style("stroke-width", 3)
+            .style("stroke", "yellow")
+            .style("stroke-width", 3)
     })
 
     // plot loaded notification

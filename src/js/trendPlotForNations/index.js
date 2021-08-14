@@ -64,6 +64,20 @@ const sortByDate = ((a, b) => {
 });
 //#endregion
 
+// tooltip mouseover positioning function
+const trendMouseEventHandler = (event) => {
+    const mousePosX = event.clientX
+    const mousePosY = event.clientY
+    const halfRectHeight = document.getElementById('nationsTrendPlot').getBoundingClientRect().height/2
+
+    if(mousePosY < halfRectHeight) {
+        nationTooltip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, 20%);`)
+    }
+    else {
+        nationTooltip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, -120%);`)
+    }
+}
+
 // Get the data
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
@@ -114,12 +128,13 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .attr("id", `trend-${key}`)
             .attr("d", valueline)
             .on('mouseover', () => {
-                // Get mouse coordinates TODO: tooltip near to the mouse
-                const x = d3.event.pageX - document.getElementById('nationsTrendPlot').getBoundingClientRect().x + 10
-                const y = d3.event.pageX - document.getElementById('nationsTrendPlot').getBoundingClientRect().y + 10
+
+                document.addEventListener('mousemove', trendMouseEventHandler, true)
+
                 nationTooltip.show(idToNation[key])
             })
             .on('mouseout', () => {
+                document.removeEventListener('mousemove', trendMouseEventHandler, true)
                 nationTooltip.hide(key)
             })
             .on("click", selectNationForTrend)
