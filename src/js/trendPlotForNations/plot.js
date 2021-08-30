@@ -1,26 +1,21 @@
-const nationsTrendMargin = { top: 20, right: 50, bottom: 50, left: 50 },
-    nationsTrendWidth = d3.select("#nationsTrendPlot").node().getBoundingClientRect().width - nationsTrendMargin.left - nationsTrendMargin.right,
-    nationsTrendHeight = d3.select("#nationsTrendPlot").node().getBoundingClientRect().height - nationsTrendMargin.top - nationsTrendMargin.bottom
+nationsTrendMargin = { top: 20, right: 50, bottom: 50, left: 50 }
+nationsTrendWidth = d3.select("#nationsTrendPlot").node().getBoundingClientRect().width - nationsTrendMargin.left - nationsTrendMargin.right
+nationsTrendHeight = d3.select("#nationsTrendPlot").node().getBoundingClientRect().height - nationsTrendMargin.top - nationsTrendMargin.bottom
 
 // initialize tooltips
-const nationTooltip = d3.tip()
+nationTooltip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(nationName => `<strong>Country: </strong><span class='details'> ${nationName}`)
 
 // set the ranges
-const x = d3.scaleTime().range([0, nationsTrendWidth])
-const y = d3.scaleLinear().range([nationsTrendHeight, 0])
-
-// define the line
-const valueline = d3.line()
-    .x(d => x(d['date']))
-    .y(d => y(d['close']))
+x = d3.scaleTime().range([0, nationsTrendWidth])
+y = d3.scaleLinear().range([nationsTrendHeight, 0])
 
 // append the svg obgect to the body of the page
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
-const nationsTrendPlot = d3.select("#nationsTrendPlot")
+nationsTrendPlot = d3.select("#nationsTrendPlot")
     //.append("div")
     //.classed("svg-container", true)
     .append("svg")
@@ -52,8 +47,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         }
     })
 
-    // Maintain a dictionary for each path you want to draw
-    dataPaths = {}
+    
 
     Object.entries(perNationTweetCount).forEach(([nation, data]) => {
         //console.log(data)
@@ -66,6 +60,33 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         else dataPaths[nation] = perPeriodValues
     })
 
+    Object.entries(dataPaths).forEach(([key, value]) => {
+        var currDate = new Date("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)")
+        var ending = new Date("Mon Feb 01 2021 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)")
+
+        var newValues = []
+
+        while (currDate.getTime() != ending.getTime()) {
+            found = false
+            value.forEach(v => {
+                aDate = new Date(v["date"])
+                if(aDate.getTime() == currDate.getTime())
+                    found = true;
+            })
+            if (!found) {
+                var insert = {
+                    date: new Date(currDate.getTime()),
+                    close: 0
+                }
+                newValues.push(insert)
+            }
+            currDate.setDate(currDate.getDate() + 1)
+        }
+        //console.log("USCITO DAL LOOP")
+        newValues.forEach(v => dataPaths[key].push(v))
+    })
+
+    console.log(dataPaths)
     const flattenedData = []
     Object.values(dataPaths).forEach(dp => dp.forEach(d => {
         flattenedData.push(d)
@@ -112,7 +133,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach(nation => {
         d3.select(`#trend-${nation}`)
-            .style("stroke", "rgb(70, 130, 180)")
+            .style("stroke", "black")
     })
 
 })
