@@ -1,5 +1,4 @@
 var format = d3.format(",");
-var tweetsByCountryId = {};
 
 // Set tooltips
 var tip = d3.tip()
@@ -12,13 +11,11 @@ var margin = { top: 0, right: 0, bottom: 0, left: 0 },
     width = d3.select("#worldmap").node().getBoundingClientRect().width - margin.left - margin.right,
     height = d3.select("#worldmap").node().getBoundingClientRect().height - margin.top - margin.bottom
 
-var color = d3.scaleThreshold()
-    .domain([10, 50, 100, 300, 500, 1000, 2000, 5000, 10000, 20000])
-    .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]);
+
 
 var path = d3.geoPath();
 
-var svg = d3.select("#worldmap")
+svg = d3.select("#worldmap")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
@@ -40,17 +37,25 @@ queue()
     .await(ready)
 
 function ready(error, data, tweets) {
-
+    dataWorldCountries = data
     tweets.forEach(t => {
-        if (tweetsByCountryId[t.country_id])
+        if(tweetsByCountryId[t.country_id]) {
             tweetsByCountryId[t.country_id].push(t)
-        else
+            initialTweets[t.country_id].push(t)
+        }
+        else {
             tweetsByCountryId[t.country_id] = [t]
+            initialTweets[t.country_id] = [t]
+        }
+
     })
 
     data.features.forEach(f => {
-        if (!tweetsByCountryId[f.id])
+        if(!tweetsByCountryId[f.id]) {
             tweetsByCountryId[f.id] = []
+            initialTweets[f.id] = []
+        }
+
     })
     // tweets.forEach(t => {
     //     data.features.forEach(f => {
@@ -99,7 +104,7 @@ function ready(error, data, tweets) {
         .style('stroke-width', 1.5)
         .style("opacity", 0.8)
         // tooltips
-        .style("stroke", "white")
+        .style("stroke", "black")
         .style('stroke-width', 0.3)
         .on('mouseover', function (d) {
 
@@ -123,9 +128,9 @@ function ready(error, data, tweets) {
 
             if (!selectedNations.includes(d.id)) {
                 d3.select(this)
-                    .style("opacity", 0.8)
-                    .style("stroke", "white")
-                    .style("stroke-width", 0.3)
+                .style("opacity", 0.8)
+                .style("stroke", "black")
+                .style("stroke-width", 0.3)
             }
         })
         .on("click", selectNationForMap)

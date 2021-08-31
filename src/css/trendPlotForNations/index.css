@@ -3,3 +3,9 @@
     stroke: rgba(29, 161, 242, 0.2);
     stroke-width: 3px;
 }
+
+.line-gab {
+    fill: none;
+    stroke: yellow;
+    stroke-width: 3px;
+}
