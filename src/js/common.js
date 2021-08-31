@@ -181,6 +181,7 @@ const nationsIds = Object.keys(idToNation)
 
 const selectedNations = ['USA', 'GBR', 'IND']
 
+dataPaths = {}
 const selectNation = (key) => {
     if(selectedNations.includes(key)) {
         delete selectedNations[selectedNations.indexOf(key)]

@@ -29,6 +29,19 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
 // associate tooltips to this plot
 nationsTrendPlot.call(nationTooltip)
 
+const trendMouseEventHandler = (event) => {
+    const mousePosX = event.clientX
+    const mousePosY = event.clientY
+    const halfRectHeight = document.getElementById('nationsTrendPlot').getBoundingClientRect().height/2
+
+    if(mousePosY < halfRectHeight) {
+        nationTooltip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, 20%);`)
+    }
+    else {
+        nationTooltip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, -120%);`)
+    }
+}
+
 // Get the data
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
