@@ -57,8 +57,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         }
     })
 
-
-
     Object.entries(perNationTweetCount).forEach(([nation, data]) => {
         const perPeriodData = aggregateForPeriod(data, timeGrain)
         const perPeriodValues = Object.entries(perPeriodData).map(([time, count]) => ({
@@ -92,7 +90,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             currDate.setDate(currDate.getDate() + 1)
         }
         //console.log("USCITO DAL LOOP")
-        newValues.forEach(v => dataPaths[key].push(v))
+        //newValues.forEach(v => dataPaths[key].push(v))
     })
 
     console.log(dataPaths)
@@ -128,6 +126,29 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 nationTooltip.hide(key)
             })
             .on("click", selectNationForTrend)
+        
+        if(selectedNations.includes(key)) {
+            nationsTrendPlot.selectAll("dots")
+            .data([value])
+            .enter()
+            .append('g')
+            .style("fill", "black")
+            .selectAll("myPoints")
+            .data(function(d){ return d; })
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return x(d['date']) } )
+            .attr("cy", function(d) { return y(d['close']) } )
+            .attr("r", 4)
+            .attr("stroke", "white")
+            .on("mouseover", (d) => {
+                nationTooltip.show(d)
+            })
+            .on("mouseout", function(d) {
+                nationTooltip.hide(d)
+            });
+        }
+        
     })
 
     // Add the X Axis

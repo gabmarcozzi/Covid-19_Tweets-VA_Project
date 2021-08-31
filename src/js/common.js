@@ -211,7 +211,7 @@ const selectNation = (key) => {
         .duration(500)
         .style("stroke", "black")
     }
-
+    updateNationPlot(x.domain()[0], x.domain()[1])
 }
 
 const stopWords = {
@@ -650,10 +650,10 @@ window.onload = () => {
     document.getElementById("loadedPage").style.display = "block"
     document.getElementById("loadedPage").style.display = "none"
     document.getElementById("loader").style.display = "block"
-    updateNationPlot(x.domain()[0], x.domain()[1])
+    //updateNationPlot(x.domain()[0], x.domain()[1])
 }
 
-const timeGrain = 'day'
+const timeGrain = 'month'
 // parse the date / time
 let parseTime
 if (timeGrain === 'month') parseTime = d3.timeParse("%b-%Y")
@@ -788,7 +788,6 @@ var nationsTrendWidth;
 var nationsTrendHeight;
 
 var nationTooltip;
-
 // define the line
 var valueline = d3.line()
     .x(d => x(d['date']))
@@ -837,6 +836,7 @@ function updateNationPlot(start, end) {
 
     nationsTrendPlot.selectAll("g").remove();
     nationsTrendPlot.selectAll("path").remove();
+    nationsTrendPlot.selectAll("dots").remove();
 
     nationsTrendPlot.append("g")
         .attr("transform", "translate(0," + nationsTrendHeight + ")")
@@ -844,7 +844,8 @@ function updateNationPlot(start, end) {
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
-
+    
+    var b = []
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
 
@@ -858,7 +859,7 @@ function updateNationPlot(start, end) {
             //console.log(v['date'])
             dataInside = new Date(v['date'])
             s = new Date(start)
-            s.setDate(s.getDate() - 1)
+            //s.setDate(s.getDate() - 1)
             e = new Date(end)
 
             if(dataInside >= s && dataInside <= e) {
@@ -866,6 +867,8 @@ function updateNationPlot(start, end) {
 
             }
         })
+
+        b.push.apply(b, a)
 
         //console.log(a)
         // Add the valueline path.
@@ -884,8 +887,24 @@ function updateNationPlot(start, end) {
                 nationTooltip.hide(key)
             })
             .on("click", selectNationForTrend)
-    })
 
+        console.log(a)
+        if(selectedNations.includes(key)) {
+            nationsTrendPlot.selectAll("dots")
+                .data([a])
+                .enter()
+                .append('g')
+                .style("fill", "black")
+                .selectAll("myPoints")
+                .data(function(d){ return d; })
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return x(d['date']) } )
+                .attr("cy", function(d) { return y(d['close']) } )
+                .attr("r", 4)
+                .attr("stroke", "white")
+        }
+    })
 
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach(nation => {
