@@ -13,7 +13,7 @@ const wordCloudSvg = d3.select("#wordcloud").append("svg")
   .attr("transform",
     "translate(" + wordCloudMargin.left + "," + wordCloudMargin.top + ")");
 
-d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
+d3.csv("http://localhost:3000/downsampledCovidTweetsDataset.csv", (error, data) => {
   if (error) throw error
 
   const wordFrequencies = {}

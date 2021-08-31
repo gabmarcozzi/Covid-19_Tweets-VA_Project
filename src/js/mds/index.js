@@ -13,7 +13,7 @@ var mdsSvg = d3.select("#mds")
   .attr("transform",
     "translate(" + mdsMargin.left + "," + mdsMargin.top + ")")
 
-d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
+d3.csv("http://localhost:3000/downsampledCovidTweetsDataset.csv", (error, data) => {
   if (error) throw error
 
   // Add X axis
@@ -39,9 +39,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     return [parseInt(d.retweet_count), parseInt(d.user_friends_count), tokenizedTweet.length, moment(d.created_at).diff(moment('01-03-2020', 'DD-MM-YYYY'), 'day')]
   })
 
-  const cutMatrix = tweetsMatrix.slice(0, 5000)
+  //const cutMatrix = tweetsMatrix.slice(0, 5000)
 
-  const druidMDS = new druid.MDS(cutMatrix)
+  const druidMDS = new druid.MDS(tweetsMatrix)
 
   const druidReducedMatrix = druidMDS.transform() 
 

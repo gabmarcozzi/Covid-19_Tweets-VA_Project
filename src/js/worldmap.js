@@ -36,7 +36,7 @@ svg.call(tip)
 
 queue()
     .defer(d3.json, "http://localhost:3000/world_countries.json")
-    .defer(d3.csv, "http://localhost:3000/covidTweetsDataset.csv")
+    .defer(d3.csv, "http://localhost:3000/downsampledCovidTweetsDataset.csv")
     .await(ready)
 
 function ready(error, data, tweets) {

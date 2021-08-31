@@ -79,7 +79,7 @@ const trendMouseEventHandler = (event) => {
 }
 
 // Get the data
-d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
+d3.csv("http://localhost:3000/downsampledCovidTweetsDataset.csv", (error, data) => {
     if (error) throw error
 
     // Find All the nations that are present in the dataset
