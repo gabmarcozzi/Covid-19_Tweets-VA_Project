@@ -104,14 +104,14 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
 
     // Draw the wordcloud
     layout.start()
+
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
   }
 
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
   if (error) throw error
 
   updateWordCloud(data)
-
-  // plot loaded notification
-  const loaded = new Event('loaded')
-  window.dispatchEvent(loaded)
 })

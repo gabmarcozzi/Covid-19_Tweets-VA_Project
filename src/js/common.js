@@ -810,6 +810,10 @@ function updateWorldMap(start, end) {
                 .style("stroke", "yellow")
                 .style("stroke-width", 3)
     })
+
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
 }
 
 var nationsTrendPlot;
@@ -1029,7 +1033,9 @@ function updateNationPlot(start, end) {
         }
     })
 
-
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
 }
 
 let loadedViews = 0
@@ -1037,8 +1043,8 @@ let loadedViews = 0
 // loading view
 window.addEventListener('loaded', event => {
     loadedViews += 1
-    if(loadedViews === 4) {
-        loadedViews = 0
+    console.log(loadedViews)
+    if(loadedViews === 5) {
         console.log('loaded')
         document.getElementById("loader").style.display = "none"
         document.getElementById("loadedPage").style.display = "block"

@@ -57,8 +57,6 @@ const updateMDS = (data, start = null, end = null) => {
 
     const points = pointsContainer.selectAll("circle")
 
-    console.log(points._groups[0].length)
-
     points
         .data(druidReducedMatrix)
         .enter()
@@ -69,6 +67,10 @@ const updateMDS = (data, start = null, end = null) => {
         .style("fill", "#1DA1F2")
 
     points.exit().remove()
+
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
 }
 
 
@@ -76,8 +78,4 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
 
     updateMDS(data)
-
-    // plot loaded notification
-    const loaded = new Event('loaded')
-    window.dispatchEvent(loaded)
 })
