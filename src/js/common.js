@@ -177,6 +177,23 @@ const idToNation = {
     ZWE: "Zimbabwe"
 }
 
+function conv(x) {
+    var out;
+    if(x == 0) out = "January"
+    if(x == 1) out = "February"
+    if(x == 2) out = "March"
+    if(x == 3) out = "April"
+    if(x == 4) out = "May"
+    if(x == 5) out = "June"
+    if(x == 6) out = "July"
+    if(x == 7) out = "August"
+    if(x == 8) out = "September"
+    if(x == 9) out = "October"
+    if(x == 10) out = "November"
+    if(x == 11) out = "December"
+    return out;
+}
+
 const nationsIds = Object.keys(idToNation)
 
 const selectedNations = ['USA', 'GBR', 'IND']
@@ -646,6 +663,20 @@ const stopWords = {
     'z': 1
 }
 
+var dateList = [
+    new Date("Mar 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Apr 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("May 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Jun 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Jul 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Aug 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Sep 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Oct 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Nov 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Dec 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Jan 01 2021 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
+    new Date("Feb 01 2021 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)")
+]
 window.onload = () => {
     document.getElementById("loadedPage").style.display = "block"
     document.getElementById("loadedPage").style.display = "none"
@@ -787,58 +818,63 @@ var nationsTrendWidth;
 var nationsTrendHeight;
 
 var nationTooltip;
+var nationTooltipDot;
 // define the line
 var valueline = d3.line()
     .x(d => x(d['date']))
     .y(d => y(d['close']))
 
+const flattenedData = [];
+
 function updateNationPlot(start, end) {
+    var bool = false;
     // x.domain(d3.extent(flattenedData, d => d['date']))
     // y.domain([0, d3.max(flattenedData, d => d['close'])])
+    if (new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
+        x.domain(d3.extent(flattenedData, d => d['date']))
+        y.domain([0, d3.max(flattenedData, d => d['close'])])
+        bool = true
+    }
+    else {
+        x.domain([new Date(start), new Date(end)])
 
-    x.domain([new Date(start), new Date(end)])
+        var a = {};
+        Object.entries(dataPaths).forEach(([key, value]) => {
 
-    var a = {};
-    Object.entries(dataPaths).forEach(([key, value]) => {
+            //console.log("AO SGHI")
+            //console.log(value['date'])
+            value.forEach(v => {
+                //console.log(v['date'])
+                dataInside = new Date(v['date'])
+                s = new Date(start)
+                //s.setDate(s.getDate() - 1)
+                e = new Date(end)
 
-        value.forEach(v => {
-            dataInside = new Date(v['date'])
-            s = new Date(start)
-            s.setDate(s.getDate() - 1)
-            e = new Date(end)
-
-            if(dataInside >= s && dataInside <= e) {
-                if(a[key]) a[key].push(v)
-                else
-                    a[key] = [v]
-            }
+                if(dataInside >= s && dataInside <= e) {
+                    if(a[key]) a[key].push(v)
+                    else
+                        a[key] = [v]
+                }
+            })
         })
-    })
 
-    var max = 0;
-    if(selectedNations.length > 0) {
-        selectedNations.forEach(elem => {
-            if(a[elem]) {
-                a[elem].forEach(v => {
-                    if(v["close"] > max)
-                        max = v["close"]
-                })
-            }
-        })
-        if(max > 0)
-            y.domain([0, max])
+        var max = 0;
+        if(selectedNations.length > 0) {
+            selectedNations.forEach(elem => {
+                if(a[elem]) {
+                    a[elem].forEach(v => {
+                        if(v["close"] > max)
+                            max = v["close"]
+                    })
+                }
+            })
+            console.log(max)
+            if(max > 0)
+                y.domain([0, max])
+        }
     }
 
-    nationsTrendPlot.selectAll("g").remove();
-    nationsTrendPlot.selectAll("path").remove();
-    nationsTrendPlot.selectAll("dots").remove();
-
-    nationsTrendPlot.append("g")
-        .attr("transform", "translate(0," + nationsTrendHeight + ")")
-        .call(d3.axisBottom(x))
-    // Add the Y Axis
-    nationsTrendPlot.append("g")
-        .call(d3.axisLeft(y))
+    nationsTrendPlot.selectAll("*").remove();
     
     var b = []
     Object.entries(dataPaths).forEach(([key, value]) => {
@@ -847,60 +883,153 @@ function updateNationPlot(start, end) {
         // Define the selectNation method
         const selectNationForTrend = () => selectNation(key)
 
-        var a = []
-        value.forEach(v => {
-            dataInside = new Date(v['date'])
-            s = new Date(start)
-            //s.setDate(s.getDate() - 1)
-            e = new Date(end)
-
-            if(dataInside >= s && dataInside <= e) {
-                a.push(v);
-
-            }
-        })
-
-        b.push.apply(b, a)
-
+        //console.log(a)
         // Add the valueline path.
-        nationsTrendPlot.append("path")
-            .data([a])
+        if(bool) {
+            console.log("SE")
+            nationsTrendPlot.append("path")
+            .data([value])
             .attr("class", "line")
             .attr("id", `trend-${key}`)
             .attr("d", valueline)
             .on('mouseover', () => {
-                // Get mouse coordinates TODO: tooltip near to the mouse
-                const x = d3.event.pageX - document.getElementById('nationsTrendPlot').getBoundingClientRect().x + 10
-                const y = d3.event.pageX - document.getElementById('nationsTrendPlot').getBoundingClientRect().y + 10
+
+                document.addEventListener('mousemove', trendMouseEventHandler, true)
+
                 nationTooltip.show(idToNation[key])
             })
             .on('mouseout', () => {
+                document.removeEventListener('mousemove', trendMouseEventHandler, true)
                 nationTooltip.hide(key)
             })
-            .on("click", selectNationForTrend)
+            .on("click", selectNationForTrend);
+        }
+        else {
+            var a = [];
+            //console.log("AO SGHI")
+            //console.log(value['date'])
+            value.forEach(v => {
+                //console.log(v['date'])
+                dataInside = new Date(v['date'])
+                s = new Date(start)
+                //s.setDate(s.getDate() - 10)
+                e = new Date(end)
 
-        if(selectedNations.includes(key)) {
-            nationsTrendPlot.selectAll("dots")
+                if(dataInside >= s && dataInside <= e) {
+                    a.push(v);
+
+                }
+            })
+
+            b.push.apply(b, a)
+
+            nationsTrendPlot.append("path")
                 .data([a])
-                .enter()
-                .append('g')
-                .style("fill", "black")
-                .selectAll("myPoints")
-                .data(function(d){ return d; })
-                .enter()
-                .append("circle")
-                .attr("cx", function(d) { return x(d['date']) } )
-                .attr("cy", function(d) { return y(d['close']) } )
-                .attr("r", 4)
-                .attr("stroke", "white")
+                .attr("class", "line")
+                .attr("id", `trend-${key}`)
+                .attr("d", valueline)
+                .on('mouseover', () => {
+
+                    document.addEventListener('mousemove', trendMouseEventHandler, true)
+
+                    nationTooltip.show(idToNation[key])
+                })
+                .on('mouseout', () => {
+                    document.removeEventListener('mousemove', trendMouseEventHandler, true)
+                    nationTooltip.hide(key)
+                })
+                .on("click", selectNationForTrend)
         }
     })
+
+    nationsTrendPlot.append("g")
+        .attr("transform", "translate(0," + nationsTrendHeight + ")")
+        .call(d3.axisBottom(x))
+    // Add the Y Axis
+    nationsTrendPlot.append("g")
+        .call(d3.axisLeft(y))
 
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach(nation => {
         d3.select(`#trend-${nation}`)
-            .style("stroke", "black")
+            .style("stroke", "yellow");
+
+        d3.select(`#trend-${nation}`).raise()
     })
+
+    Object.entries(dataPaths).forEach(([key, value]) => {
+        value.sort(sortByDate)
+
+        // Define the selectNation method
+        const selectNationForTrend = () => selectNation(key)
+
+        if(bool) {
+            if(selectedNations.includes(key)) {
+                nationsTrendPlot.selectAll("dots")
+                    .data([value])
+                    .enter()
+                    .append('g')
+                    .style("fill", "black")
+                    .selectAll("myPoints2")
+                    .data(function(d){ return d; })
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) { return x(d['date']) } )
+                    .attr("cy", function(d) { return y(d['close']) } )
+                    .attr("r", 4)
+                    .attr("stroke", "white")
+                    .on("mouseover", (d) => {
+                        nationTooltipDot.show(d, idToNation[key])
+                    })
+                    .on("mouseout", function(d) {
+                        nationTooltipDot.hide(d, idToNation[key])
+                    });
+            }
+        }
+        else {
+            var a = [];
+            //console.log("AO SGHI")
+            //console.log(value['date'])
+            value.forEach(v => {
+                //console.log(v['date'])
+                dataInside = new Date(v['date'])
+                s = new Date(start)
+                //s.setDate(s.getDate() - 1)
+                e = new Date(end)
+
+                if(dataInside >= s && dataInside <= e) {
+                    a.push(v);
+
+                }
+            })
+
+            b.push.apply(b, a)
+
+            if(selectedNations.includes(key)) {
+                nationsTrendPlot.selectAll("dots")
+                    .data([a])
+                    .enter()
+                    .append('g')
+                    .style("fill", "black")
+                    .selectAll("myPoints2")
+                    .data(function(d){ return d; })
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) { return x(d['date']) } )
+                    .attr("cy", function(d) { return y(d['close']) } )
+                    .attr("r", 4)
+                    .attr("stroke", "white")
+                    .on("mouseover", (d) => {
+                        nationTooltipDot.show(d, idToNation[key])
+                    })
+                    .on("mouseout", function(d) {
+                        nationTooltipDot.hide(d, idToNation[key])
+                    });
+            }
+        }
+    })
+
+
 }
 
 let loadedViews = 0

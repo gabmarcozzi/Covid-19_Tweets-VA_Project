@@ -30,17 +30,6 @@ const xContainer = mdsSvg.append("g")
 const pointsContainer = mdsSvg.append('g')
 
 const updateMDS = (data, start = null, end = null) => {
-    // const mdsPoints = document.getElementsByClassName("mdsPoint")
-    //
-    // console.log(mdsPoints.length)
-    //
-    // if(mdsPoints.length > 0) {
-    //     for(let p of mdsPoints) {
-    //         p.remove()
-    //     }
-    //     pointsContainer.exit()
-    // }
-
     if(start && end) {
         data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))
     }
@@ -78,6 +67,8 @@ const updateMDS = (data, start = null, end = null) => {
         .attr("cy", d => mdsY(d[1]))
         .attr("r", 2)
         .style("fill", "#1DA1F2")
+
+    points.exit().remove()
 }
 
 

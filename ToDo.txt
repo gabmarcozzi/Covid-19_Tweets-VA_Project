@@ -1,0 +1,12 @@
+- aggiustare visualizzazione ascisse quando si zoomma
+- colori linee grafico in alto a destra
+- colori mappa del mondo
+- fix punti quando si fa brushing ######################################### FATTO
+- tooltip punti grafico in alto a destra ################################## FATTO
+- non permettere brushing più piccolo di 2 mesi ########################### FATTO
+- aggiustare dataset (marzo e febbraio)
+- righe nere in primo piano ############################################### FATTO
+- cerchio loading centrato
+- grafico media(e/o somma!!) grafici selezionati
+- bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni)
+- bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale
