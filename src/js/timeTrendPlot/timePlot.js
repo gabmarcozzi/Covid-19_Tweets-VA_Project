@@ -1,20 +1,3 @@
-function conv(x) {
-    var out;
-    if(x == 0) out = "January"
-    if(x == 1) out = "February"
-    if(x == 2) out = "March"
-    if(x == 3) out = "April"
-    if(x == 4) out = "May"
-    if(x == 5) out = "June"
-    if(x == 6) out = "July"
-    if(x == 7) out = "August"
-    if(x == 8) out = "September"
-    if(x == 9) out = "October"
-    if(x == 10) out = "November"
-    if(x == 11) out = "December"
-    return out;
-}
-
 const timeTooltip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
@@ -53,7 +36,7 @@ timeTrendPlot.call(timeTooltip)
 
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
-
+    
     const tweets = []
     data.forEach(d => {
         tweets.push(d)
@@ -64,20 +47,20 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // Maintain a dictionary for each path you want to draw
     var dataPath = [];
     const perPeriodData = aggregateForPeriod(tweets, 'month')
-    console.log(perPeriodData)
+    //console.log(perPeriodData)
     const perPeriodValues = Object.entries(perPeriodData).map(([time, count]) => ({
         date: parseTimePlot(time),
         close: count
     }))
     
     perPeriodValues.forEach(v => dataPath.push(v))
-    console.log(dataPath)
+    //console.log(dataPath)
 
     const flattenedData = []
     Object.values(dataPath).forEach(d => {
         flattenedData.push(d)
     })
-    console.log(flattenedData)
+    //console.log(flattenedData)
 
 
     // Scale the range of the data
@@ -172,24 +155,50 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         xAxis.domain([ 4,8])
         }else{
             s = new Date(xAxis.invert(extent[0]))
-            st = new Date(s.getFullYear(), s.getMonth()+1, 1);
-            st.setHours(00,00,00)
+            s.setHours(00,00,00)
+
             e = new Date(xAxis.invert(extent[1]))
-            en = new Date(e.getFullYear(), e.getMonth(), 1); 
-            en.setHours(00,00,00)
+            e.setHours(23,59,00)
+
+            var count = 0;
+            dateList.forEach(date => {
+                if(date >= s && date <= e) {
+                    console.log("date: " + date)
+                    count = count + 1;
+                }
+                
+            })
 
             console.log(s)
             console.log(e)
-            xAxis.domain([st, en])
-            updateWorldMap(st, en)
-            updateNationPlot(st, en)
-            // console.log("ALLORA")
-            // console.log(xAxis.invert(extent[0]).setHours(00,00,00))
-            // var gg = new Date(xAxis.invert(extent[0]))
-            // gg.setHours(00, 00, 00)
-            // console.log(gg)
-            
-            area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+            console.log(count)
+
+            if (count >= 2) {
+                if(s.getDate() > 1) {
+                    st = new Date(s.getFullYear(), s.getMonth()+1, 1);
+                    st.setHours(00,00,00)
+                }
+                else {
+                    st = new Date(s.getFullYear(), s.getMonth(), 1);
+                    st.setHours(00,00,00)
+                }
+                
+                
+                en = new Date(e.getFullYear(), e.getMonth(), 1); 
+                en.setHours(00,00,00)
+
+                
+                xAxis.domain([st, en])
+                updateWorldMap(st, en)
+                updateNationPlot(st, en)
+                // console.log("ALLORA")
+                // console.log(xAxis.invert(extent[0]).setHours(00,00,00))
+                // var gg = new Date(xAxis.invert(extent[0]))
+                // gg.setHours(00, 00, 00)
+                // console.log(gg)
+                
+                area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+            }
         }
 
         // Update axis and area position
@@ -200,10 +209,10 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .duration(1000)
             .attr("d", areaGenerator)
         
-        d3.selectAll("circle")
+        timeTrendPlot.selectAll("circle")
             .remove()
 
-        area.selectAll("dots")
+        timeTrendPlot.selectAll("dots")
             .data([dataPath])
             .enter()
             .append('g')
@@ -219,7 +228,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 .attr("stroke", "white")
             .duration(1000)
             
-        area.selectAll("circle")
+        timeTrendPlot.selectAll("circle")
             .on("mouseover", (d) => {
                 timeTooltip.show(d)
             })
@@ -231,34 +240,35 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // If user double click, reinitialize the chart
     timeTrendPlot.on("dblclick",function() {
         dbclick = true
-        updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
-        updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
+        updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
+        updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
         xAxis.domain(d3.extent(flattenedData, d => d['date']))
         ciao.transition().call(d3.axisBottom(xAxis))
+        
         area
             .select('.myArea')
             .transition()
             .attr("d", areaGenerator)
         
-        // timeTrendPlot.selectAll("dots")
-        //     .data([dataPath])
-        //     .enter()
-        //     .append('g')
-        //     .style("fill", "black")
-        //     .selectAll("myPoints")
-        //     .data(function(d){ return d; })
-        //     .enter()
-        //     .append("circle")
-        //     .attr("cx", function(d) { return xAxis(d['date']) } )
-        //     .attr("cy", function(d) { return yAxis(d['close']) } )
-        //     .attr("r", 6)
-        //     .attr("stroke", "white")
-        //     .on("mouseover", (d) => {
-        //         timeTooltip.show(d)
-        //     })
-        //     .on("mouseout", function(d) {
-        //         timeTooltip.hide(d)
-        //     });
+        timeTrendPlot.selectAll("dots")
+            .data([dataPath])
+            .enter()
+            .append('g')
+            .style("fill", "black")
+            .selectAll("myPoints")
+            .data(function(d){ return d; })
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return xAxis(d['date']) } )
+            .attr("cy", function(d) { return yAxis(d['close']) } )
+            .attr("r", 6)
+            .attr("stroke", "white")
+            .on("mouseover", (d) => {
+                timeTooltip.show(d)
+            })
+            .on("mouseout", function(d) {
+                timeTooltip.hide(d)
+            });
     });
     
 })

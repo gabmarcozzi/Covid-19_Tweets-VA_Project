@@ -1,0 +1,10 @@
+- aggiustare visualizzazione ascisse quando si zoomma
+- colori linee grafico in alto a destra
+- colori mappa del mondo
+- fix punti quando si fa brushing ######################################### FATTO
+- tooltip punti grafico in alto a destra ################################## FATTO
+- non permettere brushing più piccolo di 2 mesi ########################### FATTO
+- aggiustare dataset (marzo e febbraio)
+- righe nere in primo piano ############################################### FATTO
+- cerchio loading centrato
+- grafico media(e/o somma!!) grafici selezionati

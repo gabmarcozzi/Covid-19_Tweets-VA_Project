@@ -8,6 +8,14 @@ nationTooltip = d3.tip()
     .offset([-10, 0])
     .html(nationName => `<strong>Country: </strong><span class='details'> ${nationName}`)
 
+// initialize tooltips
+nationTooltipDot = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d, nationName) {
+        return `<strong>Country: </strong><span class='details'> ${nationName}` + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
+    }) 
+
 // set the ranges
 const x = d3.scaleTime().range([0, nationsTrendWidth])
 const y = d3.scaleLinear().range([nationsTrendHeight, 0])
@@ -28,6 +36,7 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
 
 // associate tooltips to this plot
 nationsTrendPlot.call(nationTooltip)
+nationsTrendPlot.call(nationTooltipDot)
 
 const trendMouseEventHandler = (event) => {
     const mousePosX = event.clientX
@@ -68,8 +77,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     })
 
     Object.entries(dataPaths).forEach(([key, value]) => {
-        var currDate = new Date("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)")
-        var ending = new Date("Mon Feb 01 2021 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)")
+        var currDate = new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)")
+        var ending = new Date("Mon Feb 01 2021 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)")
 
         var newValues = []
 
@@ -93,8 +102,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         //newValues.forEach(v => dataPaths[key].push(v))
     })
 
-    console.log(dataPaths)
-    const flattenedData = []
+    //console.log(dataPaths)
     Object.values(dataPaths).forEach(dp => dp.forEach(d => {
         flattenedData.push(d)
     }))
@@ -126,29 +134,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 nationTooltip.hide(key)
             })
             .on("click", selectNationForTrend)
-        
-        if(selectedNations.includes(key)) {
-            nationsTrendPlot.selectAll("dots")
-            .data([value])
-            .enter()
-            .append('g')
-            .style("fill", "black")
-            .selectAll("myPoints")
-            .data(function(d){ return d; })
-            .enter()
-            .append("circle")
-            .attr("cx", function(d) { return x(d['date']) } )
-            .attr("cy", function(d) { return y(d['close']) } )
-            .attr("r", 4)
-            .attr("stroke", "white")
-            .on("mouseover", (d) => {
-                nationTooltip.show(d)
-            })
-            .on("mouseout", function(d) {
-                nationTooltip.hide(d)
-            });
-        }
-        
     })
 
     // Add the X Axis
@@ -164,7 +149,36 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach(nation => {
         d3.select(`#trend-${nation}`)
-            .style("stroke", "black")
+            .style("stroke", "yellow");
+        
+        d3.select(`#trend-${nation}`).raise()
+            
+    })
+
+    Object.entries(dataPaths).forEach(([key, value]) => {
+        value.sort(sortByDate)
+
+        if(selectedNations.includes(key)) {
+            nationsTrendPlot.selectAll("dots")
+            .data([value])
+            .enter()
+            .append('g')
+            .style("fill", "black")
+            .selectAll("myPoints")
+            .data(function(d){ return d; })
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return x(d['date']) } )
+            .attr("cy", function(d) { return y(d['close']) } )
+            .attr("r", 4)
+            .attr("stroke", "white")
+            .on("mouseover", (d) => {
+                nationTooltipDot.show(d, idToNation[key])
+            })
+            .on("mouseout", function(d) {
+                nationTooltipDot.hide(d, idToNation[key])
+            });
+        }
     })
 
     // plot loaded notification
