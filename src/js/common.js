@@ -712,7 +712,6 @@ function updateWorldMap(start, end) {
             })
             tweetsByCountryId[nation] = tw
         })
-        console.log(tweetsByCountryId)
     }
 
 
@@ -802,10 +801,7 @@ function updateNationPlot(start, end) {
     var a = {};
     Object.entries(dataPaths).forEach(([key, value]) => {
 
-        //console.log("AO SGHI")
-        //console.log(value['date'])
         value.forEach(v => {
-            //console.log(v['date'])
             dataInside = new Date(v['date'])
             s = new Date(start)
             s.setDate(s.getDate() - 1)
@@ -829,7 +825,6 @@ function updateNationPlot(start, end) {
                 })
             }
         })
-        console.log(max)
         if(max > 0)
             y.domain([0, max])
     }
@@ -852,11 +847,8 @@ function updateNationPlot(start, end) {
         // Define the selectNation method
         const selectNationForTrend = () => selectNation(key)
 
-        var a = [];
-        //console.log("AO SGHI")
-        //console.log(value['date'])
+        var a = []
         value.forEach(v => {
-            //console.log(v['date'])
             dataInside = new Date(v['date'])
             s = new Date(start)
             //s.setDate(s.getDate() - 1)
@@ -870,7 +862,6 @@ function updateNationPlot(start, end) {
 
         b.push.apply(b, a)
 
-        //console.log(a)
         // Add the valueline path.
         nationsTrendPlot.append("path")
             .data([a])
@@ -888,7 +879,6 @@ function updateNationPlot(start, end) {
             })
             .on("click", selectNationForTrend)
 
-        console.log(a)
         if(selectedNations.includes(key)) {
             nationsTrendPlot.selectAll("dots")
                 .data([a])

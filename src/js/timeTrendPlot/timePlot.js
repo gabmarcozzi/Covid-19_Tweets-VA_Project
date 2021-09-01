@@ -183,6 +183,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             xAxis.domain([st, en])
             updateWorldMap(st, en)
             updateNationPlot(st, en)
+            updateWordCloud(data, st, en)
+            updateMDS(data, st, en)
             // console.log("ALLORA")
             // console.log(xAxis.invert(extent[0]).setHours(00,00,00))
             // var gg = new Date(xAxis.invert(extent[0]))
@@ -233,6 +235,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         dbclick = true
         updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
         updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
+        updateWordCloud(data)
+        updateMDS(data)
         xAxis.domain(d3.extent(flattenedData, d => d['date']))
         ciao.transition().call(d3.axisBottom(xAxis))
         area
