@@ -1,3 +1,10 @@
+const mdsTooltip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function (d) {
+        return `<strong>X: </strong><span class='details'>${d[0]}` + "<br></span>" + `<strong>Y: </strong><span class='details'> ${d[1]}`
+    })
+
 // Start to set the scatterplot
 var mdsMargin = {top: 10, right: 0, bottom: 10, left: 50},
     mdsWidth = d3.select("#mds").node().getBoundingClientRect().width - mdsMargin.left - mdsMargin.right,
@@ -12,6 +19,8 @@ var mdsSvg = d3.select("#mds")
     .append("g")
     .attr("transform",
         "translate(" + mdsMargin.left + "," + mdsMargin.top + ")")
+
+mdsSvg.call(mdsTooltip)
 
 // Add X axis
 var mdsX = d3.scaleLinear()
@@ -40,6 +49,8 @@ const updateMDS = (data, start = null, end = null) => {
         return [parseInt(d.retweet_count), parseInt(d.user_friends_count), tokenizedTweet.length, moment(d.created_at).diff(moment('01-03-2020', 'DD-MM-YYYY'), 'day')]
     })
 
+
+    // FIXME
     const cutMatrix = tweetsMatrix.slice(0, 5000)
 
     const druidMDS = new druid.MDS(cutMatrix)
@@ -63,8 +74,15 @@ const updateMDS = (data, start = null, end = null) => {
         .append("circle")
         .attr("cx", d => mdsX(d[0]))
         .attr("cy", d => mdsY(d[1]))
-        .attr("r", 2)
+        .attr("r", 5)
+        .attr("stroke", "black")
         .style("fill", "#1DA1F2")
+        .on("mouseover", (d) => {
+            mdsTooltip.show(d)
+        })
+        .on("mouseout", function (d) {
+            mdsTooltip.hide(d)
+        })
 
     points.exit().remove()
 
