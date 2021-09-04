@@ -4,8 +4,14 @@ let maxY
 const mdsTooltip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
-    .html(function (d) {
-        return `<strong>X: </strong><span class='details'>${d[0]}` + "<br></span>" + `<strong>Y: </strong><span class='details'> ${d[1]}`
+    .html((d, data) => {
+        return `
+            <strong>Retweet count: </strong><span class='details'>${data[0]}` +
+            "<br></span>" + `<strong>User friends count: </strong><span class='details'>${data[1]}` +
+            "<br></span>" + `<strong>Number of words: </strong><span class='details'>${data[2]}` +
+            "<br></span>" + `<strong>Days since March 19 2020: </strong><span class='details'>${data[3]}` +
+            "<br></span>" + `<strong>X: </strong><span class='details'>${d[0]}` +
+            "<br></span>" + `<strong>Y: </strong><span class='details'> ${d[1]}`
     })
 
 // Start to set the scatterplot
@@ -141,11 +147,11 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         .attr("r", 5)
         .attr("stroke", "black")
         .style("fill", "#1DA1F2")
-        .on("mouseover", (d) => {
-            mdsTooltip.show(d)
+        .on("mouseover", (d, i) => {
+            mdsTooltip.show(d, cutMatrix[i])
         })
-        .on("mouseout", function (d) {
-            mdsTooltip.hide(d)
+        .on("mouseout", (d, i) => {
+            mdsTooltip.hide(d, cutMatrix[i])
         })
 
     if(dispatchLoaded){
