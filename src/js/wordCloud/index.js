@@ -3,7 +3,7 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
   wordCloudwidth = d3.select("#wordcloud").node().getBoundingClientRect().width - margin.left - margin.right,
   wordCloudheight = d3.select("#wordcloud").node().getBoundingClientRect().height - margin.top - margin.bottom
 
-  const updateWordCloud = (data, start = null, end = null) => {
+  const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) => {
 
     const plot = document.getElementById("wordCloudPlot")
 
@@ -106,7 +106,25 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
     // Draw the wordcloud
     layout.start()
 
-    // plot loaded notification
-    const loaded = new Event('loaded')
-    window.dispatchEvent(loaded)
+    if(dispatchLoaded) {
+      // plot loaded notification
+      const loaded = new Event('loaded')
+      window.dispatchEvent(loaded)
+    }
   }
+
+$("#reload-button-wc").click(() => {
+  $("#loader").show()
+  $("#loadedPage").hide()
+
+  $("#reload-button-wc")
+      .removeClass('mds-button')
+      .prop('disabled',true)
+
+  setTimeout(() => {
+    updateWordCloud(dataStorage, startInterval, endInterval, false)
+
+    $("#loader").hide()
+    $("#loadedPage").show()
+  },500)
+})

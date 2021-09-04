@@ -97,11 +97,15 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
                 xAxis.domain([4, 8])
             } else {
-                loadedViews = 1
+                loadedViews = 2
                 $("#loadedPage").hide()
                 $("#loader").show()
 
                 $("#reload-button")
+                    .addClass('mds-button')
+                    .prop('disabled', false)
+
+                $("#reload-button-wc")
                     .addClass('mds-button')
                     .prop('disabled', false)
 
@@ -218,7 +222,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
             updateWorldMap(st, en)
             updateNationPlot(st, en)
-            updateWordCloud(data, st, en)
+            //updateWordCloud(data, st, en)
             //updateMDS(data, st, en)
             // console.log("ALLORA")
             // console.log(xAxis.invert(extent[0]).setHours(00,00,00))
@@ -277,11 +281,15 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         // If user double click, reinitialize the chart
         timeTrendPlot.on("dblclick", function () {
             dbclick = true
-            loadedViews = 2
+            loadedViews = 3
             $("#loadedPage").hide()
             $("#loader").show()
 
             $("#reload-button")
+                .addClass('mds-button')
+                .prop('disabled', false)
+
+            $("#reload-button-wc")
                 .addClass('mds-button')
                 .prop('disabled', false)
 

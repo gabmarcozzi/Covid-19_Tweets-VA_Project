@@ -137,7 +137,6 @@
     position: relative;
     z-index: 1000;
     top:0px;
-    left:80%;
     border: black;
     padding:0.3em 1.2em;
     margin:0 0.3em 0.3em 0;
@@ -147,4 +146,12 @@
     background-color:#AAB8C2;
     text-align:center;
     transition: all 0.2s;
+}
+
+.mds-pos {
+    left:80%;
+}
+
+.wc-pos {
+    left:60%;
 }

@@ -265,6 +265,7 @@ const stopWords = {
     'although': 1,
     'always': 1,
     'among': 1,
+    'amp': 1,
     'an': 1,
     'and': 1,
     'another': 1,
