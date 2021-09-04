@@ -93,7 +93,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .on("end", () => {
             const extent = d3.event.selection
             if (!extent) {
-                if (!idleTimeout) return idleTimeout = setTimeout(idledTimePlot, 350); // This allows to wait a little bit
+                if (!idleTimeout || !dbclick) return idleTimeout = setTimeout(idledTimePlot, 350) // This allows to wait a little bit
                 resetView()
             } else {
                 loadedViews = 2
@@ -111,6 +111,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 setTimeout(() => {
                     updateChart(extent)
                 }, 500)
+                dbclick = true
             }
         })               // Each time the brush selection changes, trigger the 'updateChart' function
 
@@ -266,6 +267,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     }
 
     const resetView = () => {
+        dbclick = false
         loadedViews = 1
         $("#loadedPage").hide()
         $("#loader").show()

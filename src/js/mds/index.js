@@ -9,7 +9,7 @@ const mdsTooltip = d3.tip()
             <strong>Retweet count: </strong><span class='details'>${data[0]}` +
             "<br></span>" + `<strong>User friends count: </strong><span class='details'>${data[1]}` +
             "<br></span>" + `<strong>Number of words: </strong><span class='details'>${data[2]}` +
-            "<br></span>" + `<strong>Days since March 19 2020: </strong><span class='details'>${data[3]}` +
+            "<br></span>" + `<strong>Unix timestamp: </strong><span class='details'>${data[3]}` +
             "<br></span>" + `<strong>X: </strong><span class='details'>${d[0]}` +
             "<br></span>" + `<strong>Y: </strong><span class='details'> ${d[1]}`
     })
@@ -56,21 +56,14 @@ const clipMDS = mdsSvg.append("defs").append("svg:clipPath")
     .attr("x", 0)
     .attr("y", 0)
 
-// Add brushing
-const brushMDS = d3.brush()                 // Add the brush feature using the d3.brush function
-    .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-    .on("end", zoomChart) // Each time the brush selection changes, trigger the 'updateChart' function
-
-pointsContainer
-    .append("g")
-    .attr("class", "brushMDS")
-    .call(brushMDS)
-
-let idleTimeoutMDS
-function idled() { idleTimeoutMDS = null; }
+// Downsample dataset in order to perform MDS in a reprersentative sample of the dataset
+const downsampleData = (data) => {
+    const step = Math.floor(data.length / 5000)
+    return data.filter((d, i) => i % step === 0)
+}
 
 // A function that update the chart for given boundaries
-function zoomChart(resetZoom = false) {
+const zoomChart = (resetZoom = false) => {
 
     let extent = null
 
@@ -104,6 +97,19 @@ function zoomChart(resetZoom = false) {
 
 }
 
+// Add brushing
+const brushMDS = d3.brush()                 // Add the brush feature using the d3.brush function
+    .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+    .on("end", zoomChart) // Each time the brush selection changes, trigger the 'updateChart' function
+
+pointsContainer
+    .append("g")
+    .attr("class", "brushMDS")
+    .call(brushMDS)
+
+let idleTimeoutMDS
+function idled() { idleTimeoutMDS = null; }
+
 const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
     if(start && end) {
         // Reset chart to default zoom
@@ -113,12 +119,13 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
 
     const tweetsMatrix = data.map((d, i) => {
         // For each entry create a vector containing the number of retweets, the user's followers number and the number of words of each tweet
-        return [parseInt(d.retweet_count), parseInt(d.user_friends_count), tokenizedTweets[i].length, moment(d.created_at).diff(moment('01-03-2020', 'DD-MM-YYYY'), 'day')]
+        return [parseInt(d.retweet_count), parseInt(d.user_friends_count), tokenizedTweets[i].length, moment(d.created_at).valueOf()]
     })
 
-
     // FIXME
-    const cutMatrix = tweetsMatrix.slice(0, 5000)
+    //const cutMatrix = tweetsMatrix.slice(0, 5000)
+    const cutMatrix = downsampleData(tweetsMatrix)
+    console.log(cutMatrix.length)
 
     const druidMDS = new druid.MDS(cutMatrix)
 
