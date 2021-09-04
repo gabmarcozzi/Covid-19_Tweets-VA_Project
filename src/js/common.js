@@ -213,6 +213,22 @@ const selectNation = (key) => {
         .transition()
         .duration(500)
         .style("stroke", "rgba(29, 161, 242, 0.2)")
+        
+        console.log("Print list: " + selectedNations)
+        
+        emptyList = true;
+        selectedNations.forEach(elem => {
+            if(elem != "")
+                emptyList = false;
+        })
+
+        if(emptyList) {
+            console.log("entro")
+            y.domain([0, d3.max(flattenedData, d => d['close'])])
+            
+            nationsTrendPlot.select("g")
+                .call(d3.axisLeft(y))
+        }
     }
     else {
         selectedNations.push(key)
@@ -228,6 +244,7 @@ const selectNation = (key) => {
         .duration(500)
         .style("stroke", "black")
     }
+    
     updateNationPlot(x.domain()[0], x.domain()[1])
 }
 

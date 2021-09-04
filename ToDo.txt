@@ -8,5 +8,5 @@
 - righe nere in primo piano ############################################### FATTO
 - cerchio loading centrato
 - grafico media(e/o somma!!) grafici selezionati
-- bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni)
-- bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale
+- bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni) ###########FATTO
+- bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale #################### FATTO
