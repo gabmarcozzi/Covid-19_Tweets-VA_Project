@@ -36,6 +36,97 @@ queue()
     .defer(d3.csv, "http://localhost:3000/covidTweetsDataset.csv")
     .await(ready)
 
+function updateWorldMap(start, end) {
+    if(dbclick) {
+        Object.assign(tweetsByCountryId, initialTweets)
+    }
+    else {
+        const s = new Date(start)
+        const e = new Date(end)
+
+        Object.entries(tweetsByCountryId).forEach(([nation, tweets]) => {
+            tw = []
+            tweets.forEach(t => {
+                const curr = new Date(t.created_at)
+                if(curr >= s && curr <= e) {
+                    tw.push(t)
+                }
+            })
+            tweetsByCountryId[nation] = tw
+        })
+    }
+
+
+    const selectNationForMap = function(d) {selectNation(d.id)}
+
+    svg.selectAll("*").remove();
+
+    svg
+        .append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        //.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 1143 812")
+        .append('gA')
+        .attr('class', 'map')
+
+    svg.call(tip)
+
+    svg
+        .attr("class", "countries")
+        .selectAll("path")
+        .data(dataWorldCountries.features)
+        .enter().append("path")
+        .attr("d", path)
+        .attr('id', function(d) {return `map-${d.id}`})
+        .style("fill", function(d) { return color(tweetsByCountryId[d.id].length) })
+        .style('stroke', 'black')
+        .style('stroke-width', 1.5)
+        .style("opacity", 0.8)
+        // tooltips
+        .style("stroke", "black")
+        .style('stroke-width', 0.3)
+        .on('mouseover', function(d) {
+            tip.show(d);
+
+            if(!selectedNations.includes(d.id)) {
+                d3.select(this)
+                    .style("opacity", 1)
+                    .style("stroke", "white")
+                    .style("stroke-width", 3)
+            }
+
+        })
+        .on('mouseout', function(d) {
+            tip.hide(d);
+
+            if(!selectedNations.includes(d.id)) {
+                d3.select(this)
+                    .style("opacity", 0.8)
+                    .style("stroke", "black")
+                    .style("stroke-width", 0.3)
+            }
+        })
+        .on("click", selectNationForMap)
+
+    svg
+        .append("path")
+        .datum(topojson.mesh(dataWorldCountries.features, function(a, b) { return a.id !== b.id }))
+        // .datum(topojson.mesh(data.features, function(a, b) { return a !== b }))
+        .attr("class", "names")
+        .attr("d", path)
+
+    selectedNations.forEach(function(nation) {
+        d3.select(`#map-${nation}`)
+            .style("stroke", "yellow")
+            .style("stroke-width", 3)
+    })
+
+    // plot loaded notification
+    const loaded = new Event('loaded')
+    window.dispatchEvent(loaded)
+}
+
 function ready(error, data, tweets) {
     dataWorldCountries = data
     tweets.forEach(t => {

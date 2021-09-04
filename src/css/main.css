@@ -114,3 +114,34 @@
     top: 10px;
     left: 0;
 }
+
+.mds-button {
+    background-color:#1DA1F2!important;
+}
+
+.mds-button:hover{
+    background-color:rgba(29, 161, 242, 0.5)!important;
+}
+
+@media all and (max-width:30em){
+    mds-button{
+        display:block;
+        margin:0.2em auto;
+    }
+}
+
+.button3{
+    position: relative;
+    z-index: 1000;
+    top:0px;
+    left:80%;
+    border: black;
+    padding:0.3em 1.2em;
+    margin:0 0.3em 0.3em 0;
+    font-size: 0.8rem;
+    border-radius:2em;
+    color:#FFFFFF;
+    background-color:#AAB8C2;
+    text-align:center;
+    transition: all 0.2s;
+}

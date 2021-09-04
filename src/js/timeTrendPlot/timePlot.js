@@ -97,9 +97,14 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
                 xAxis.domain([4, 8])
             } else {
-                loadedViews = 0
-                document.getElementById("loadedPage").style.display = "none"
-                document.getElementById("loader").style.display = "block"
+                loadedViews = 1
+                $("#loadedPage").hide()
+                $("#loader").show()
+
+                $("#reload-button")
+                    .addClass('mds-button')
+                    .prop('disabled', false)
+
                 setTimeout(() => {
                     updateChart(extent)
                 }, 500)
@@ -186,15 +191,10 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         var count = 0;
         dateList.forEach(date => {
             if (date >= s && date <= e) {
-                console.log("date: " + date)
                 count = count + 1;
             }
 
         })
-
-        console.log(s)
-        console.log(e)
-        console.log(count)
 
         if (count >= 2) {
             if (s.getDate() > 1) {
@@ -209,8 +209,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             en = new Date(e.getFullYear(), e.getMonth(), 1);
             en.setHours(00, 00, 00)
 
-            console.log(s)
-            console.log(e)
+            startInterval = st
+            endInterval = en
             xAxis.domain([st, en])
 
             area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
@@ -218,7 +218,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             updateWorldMap(st, en)
             updateNationPlot(st, en)
             updateWordCloud(data, st, en)
-            updateMDS(data, st, en)
+            //updateMDS(data, st, en)
             // console.log("ALLORA")
             // console.log(xAxis.invert(extent[0]).setHours(00,00,00))
             // var gg = new Date(xAxis.invert(extent[0]))
@@ -275,15 +275,21 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         // If user double click, reinitialize the chart
         timeTrendPlot.on("dblclick", function () {
             dbclick = true
-            loadedViews = 1
-            document.getElementById("loadedPage").style.display = "none"
-            document.getElementById("loader").style.display = "block"
+            loadedViews = 2
+            $("#loadedPage").hide()
+            $("#loader").show()
+
+            $("#reload-button")
+                .addClass('mds-button')
+                .prop('disabled', false)
 
             setTimeout(() => {
+                startInterval = null
+                endInterval = null
                 updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
                 updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0100 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
                 updateWordCloud(data)
-                updateMDS(data)
+                //updateMDS(data)
                 xAxis.domain(d3.extent(flattenedData, d => d['date']))
                 ciao.transition().call(d3.axisBottom(xAxis))
 

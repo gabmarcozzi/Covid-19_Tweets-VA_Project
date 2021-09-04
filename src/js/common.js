@@ -678,10 +678,9 @@ var dateList = [
     new Date("Feb 01 2021 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)")
 ]
 window.onload = () => {
-    document.getElementById("loadedPage").style.display = "block"
-    document.getElementById("loadedPage").style.display = "none"
-    document.getElementById("loader").style.display = "block"
-    //updateNationPlot(x.domain()[0], x.domain()[1])
+    $("#loadedPage").show()
+    $("#loadedPage").hide()
+    $("#loader").show()
 }
 
 const timeGrain = 'month'
@@ -725,99 +724,8 @@ var color = d3.scaleThreshold()
     .domain([10, 50, 100, 300, 500, 1000, 2000, 5000, 10000, 20000])
     .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]);
 
-function updateWorldMap(start, end) {
-    if(dbclick) {
-        Object.assign(tweetsByCountryId, initialTweets)
-    }
-    else {
-        const s = new Date(start)
-        const e = new Date(end)
-
-        Object.entries(tweetsByCountryId).forEach(([nation, tweets]) => {
-            tw = []
-            tweets.forEach(t => {
-                const curr = new Date(t.created_at)
-                if(curr >= s && curr <= e) {
-                    tw.push(t)
-                }
-            })
-            tweetsByCountryId[nation] = tw
-        })
-    }
-
-
-    const selectNationForMap = function(d) {selectNation(d.id)}
-
-    svg.selectAll("*").remove();
-
-    svg
-        .append("svg")
-        .attr("width", "100%")
-        .attr("height", "100%")
-        //.attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 1143 812")
-        .append('gA')
-        .attr('class', 'map')
-
-    svg.call(tip)
-
-    svg
-        .attr("class", "countries")
-        .selectAll("path")
-        .data(dataWorldCountries.features)
-        .enter().append("path")
-        .attr("d", path)
-        .attr('id', function(d) {return `map-${d.id}`})
-        .style("fill", function(d) { return color(tweetsByCountryId[d.id].length) })
-        .style('stroke', 'black')
-        .style('stroke-width', 1.5)
-        .style("opacity", 0.8)
-        // tooltips
-        .style("stroke", "black")
-        .style('stroke-width', 0.3)
-        .on('mouseover', function(d) {
-            tip.show(d);
-
-            if(!selectedNations.includes(d.id)) {
-                d3.select(this)
-                .style("opacity", 1)
-                .style("stroke", "white")
-                .style("stroke-width", 3)
-            }
-
-        })
-        .on('mouseout', function(d) {
-            tip.hide(d);
-
-            if(!selectedNations.includes(d.id)) {
-                d3.select(this)
-                .style("opacity", 0.8)
-                .style("stroke", "black")
-                .style("stroke-width", 0.3)
-            }
-        })
-        .on("click", selectNationForMap)
-
-    svg
-        .append("path")
-        .datum(topojson.mesh(dataWorldCountries.features, function(a, b) { return a.id !== b.id }))
-        // .datum(topojson.mesh(data.features, function(a, b) { return a !== b }))
-        .attr("class", "names")
-        .attr("d", path)
-
-    selectedNations.forEach(function(nation) {
-        d3.select(`#map-${nation}`)
-                .style("stroke", "yellow")
-                .style("stroke-width", 3)
-    })
-
-    // plot loaded notification
-    const loaded = new Event('loaded')
-    window.dispatchEvent(loaded)
-}
-
 var nationsTrendPlot;
-var ationsTrendMargin;
+var nationsTrendMargin;
 var nationsTrendWidth;
 var nationsTrendHeight;
 
@@ -1040,13 +948,19 @@ function updateNationPlot(start, end) {
 
 let loadedViews = 0
 
+let tokenizedTweets = []
+
+let startInterval
+let endInterval
+let dataStorage
+
 // loading view
 window.addEventListener('loaded', event => {
     loadedViews += 1
     console.log(loadedViews)
     if(loadedViews === 5) {
         console.log('loaded')
-        document.getElementById("loader").style.display = "none"
-        document.getElementById("loadedPage").style.display = "block"
+        $("#loader").hide()
+        $("#loadedPage").show()
     }
 }, false)

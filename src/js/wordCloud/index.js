@@ -14,7 +14,6 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
         .attr("id", "wordCloudPlot")
         .attr("width", "100%")
         .attr("height", "100%")
-        //.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", "0 0 460 428")
         .append("g")
         .attr("transform",
@@ -22,6 +21,8 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
 
 
     const wordFrequencies = {}
+    // Empty global tokenized tweets list
+    tokenizedTweets = []
 
     if(start && end) {
       data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))
@@ -35,6 +36,8 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
 
       // tokenize the sentence
       const tokenizedTweet = tweet.split(' ')
+
+      tokenizedTweets.push(tokenizedTweet)
 
       tokenizedTweet.forEach(word => {
         // filter empty string and stop words
@@ -63,8 +66,6 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
       topTenWordFreqs.sort((a, b) => a[1] - b[1])
 
     })
-
-    // {Running: "10", Surfing: "20", Climbing: "50", Kiting: "30", Sailing: "20", Snowboarding: "60"}
 
     // List of words
     const myWords = {}
@@ -109,9 +110,3 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
     const loaded = new Event('loaded')
     window.dispatchEvent(loaded)
   }
-
-d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
-  if (error) throw error
-
-  updateWordCloud(data)
-})
