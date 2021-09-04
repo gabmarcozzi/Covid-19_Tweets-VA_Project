@@ -815,7 +815,6 @@ function updateNationPlot(start, end) {
         //console.log(a)
         // Add the valueline path.
         if(bool) {
-            console.log("SE")
             nationsTrendPlot.append("path")
             .data([value])
             .attr("class", "line")

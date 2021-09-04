@@ -91,7 +91,7 @@ function zoomChart(resetZoom = false) {
     xContainer.transition().duration(1000).attr("transform", "translate(0," + mdsY(0) + ")").call(d3.axisBottom(mdsX))
 
     mdsSvg
-        .selectAll("circle")
+        .selectAll(".mds-circle")
         .transition().duration(1000)
         .attr("cx",  d => mdsX(d[0]))
         .attr("cy", d => mdsY(d[1]))
@@ -100,9 +100,9 @@ function zoomChart(resetZoom = false) {
 
 const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
     if(start && end) {
-        data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))
         // Reset chart to default zoom
         zoomChart(true)
+        data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))
     }
 
     const tweetsMatrix = data.map((d, i) => {
@@ -127,12 +127,15 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
     yContainer.attr("transform", "translate(" + mdsX(0) + ",0)").call(d3.axisLeft(mdsY))
     xContainer.attr("transform", "translate(0," + mdsY(0) + ")").call(d3.axisBottom(mdsX))
 
-    const points = pointsContainer.selectAll("circle")
+    pointsContainer.selectAll(".mds-circle").remove()
+
+    const points = pointsContainer.selectAll(".mds-circle")
 
     points
         .data(druidReducedMatrix)
         .enter()
         .append("circle")
+        .attr('class', 'mds-circle')
         .attr("cx", d => mdsX(d[0]))
         .attr("cy", d => mdsY(d[1]))
         .attr("r", 5)
@@ -144,8 +147,6 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         .on("mouseout", function (d) {
             mdsTooltip.hide(d)
         })
-
-    points.exit().remove()
 
     if(dispatchLoaded){
         // plot loaded notification

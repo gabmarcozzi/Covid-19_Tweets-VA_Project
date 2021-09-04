@@ -160,6 +160,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         })
         .enter()
         .append("circle")
+        .attr('class', 'tp-circle')
         .attr("cx", function (d) {
             return xAxis(d['date'])
         })
@@ -234,7 +235,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 .duration(1000)
                 .attr("d", areaGenerator)
 
-            timeTrendPlot.selectAll("circle")
+            timeTrendPlot.selectAll(".tp-circle")
                 .remove()
 
             timeTrendPlot.selectAll("dots")
@@ -248,6 +249,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 })
                 .enter()
                 .append("circle")
+                .attr('class', 'tp-circle')
                 .transition()
                 .attr("cx", function (d) {
                     return xAxis(d['date'])
@@ -259,7 +261,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 .attr("stroke", "white")
                 .duration(1000)
 
-            timeTrendPlot.selectAll("circle")
+            timeTrendPlot.selectAll(".tp-circle")
                 .on("mouseover", (d) => {
                     timeTooltip.show(d)
                 })
@@ -298,7 +300,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                     .transition()
                     .attr("d", areaGenerator)
 
-                timeTrendPlot.selectAll("circle")
+                timeTrendPlot.selectAll(".tp-circle")
                     .remove()
 
                 timeTrendPlot.selectAll("dots")
@@ -312,6 +314,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                     })
                     .enter()
                     .append("circle")
+                    .attr('class', 'tp-circle')
                     .attr("cx", function (d) {
                         return xAxis(d['date'])
                     })
