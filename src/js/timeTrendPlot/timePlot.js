@@ -91,11 +91,10 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
         .extent([[0, 0], [timeTrendWidth, timeTrendHeight]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", () => {
-            dbclick = false
             const extent = d3.event.selection
             if (!extent) {
-                if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-                xAxis.domain([4, 8])
+                if (!idleTimeout) return idleTimeout = setTimeout(idledTimePlot, 350); // This allows to wait a little bit
+                resetView()
             } else {
                 loadedViews = 2
                 $("#loadedPage").hide()
@@ -149,7 +148,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // A function that set idleTimeOut to null
     var idleTimeout
 
-    function idled() {
+    function idledTimePlot() {
         idleTimeout = null;
     }
 
@@ -182,11 +181,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
     // A function that update the chart for given boundaries
     function updateChart(extent) {
-        // If no selection, back to initial coordinate. Otherwise, update X axis domain
-        // if (!extent) {
-        //     if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-        //     xAxis.domain([4, 8])
-        // } else {
         s = new Date(xAxis.invert(extent[0]))
         s.setHours(00, 00, 00)
 
@@ -222,14 +216,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
             updateWorldMap(st, en)
             updateNationPlot(st, en)
-            //updateWordCloud(data, st, en)
-            //updateMDS(data, st, en)
-            // console.log("ALLORA")
-            // console.log(xAxis.invert(extent[0]).setHours(00,00,00))
-            // var gg = new Date(xAxis.invert(extent[0]))
-            // gg.setHours(00, 00, 00)
-            // console.log(gg)
-            // }
 
             // Update axis and area position
             ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
@@ -277,68 +263,66 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         // plot loaded notification
         const loaded = new Event('loaded')
         window.dispatchEvent(loaded)
+    }
 
-        // If user double click, reinitialize the chart
-        timeTrendPlot.on("dblclick", function () {
-            dbclick = true
-            loadedViews = 3
-            $("#loadedPage").hide()
-            $("#loader").show()
+    const resetView = () => {
+        loadedViews = 1
+        $("#loadedPage").hide()
+        $("#loader").show()
 
-            $("#reload-button")
-                .addClass('mds-button')
-                .prop('disabled', false)
+        $("#reload-button")
+            .removeClass('mds-button')
+            .prop('disabled', true)
 
-            $("#reload-button-wc")
-                .addClass('mds-button')
-                .prop('disabled', false)
+        $("#reload-button-wc")
+            .removeClass('mds-button')
+            .prop('disabled', true)
 
-            setTimeout(() => {
-                startInterval = null
-                endInterval = null
-                updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
-                updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
-                updateWordCloud(data)
-                //updateMDS(data)
-                xAxis.domain(d3.extent(flattenedData, d => d['date']))
-                ciao.transition().call(d3.axisBottom(xAxis))
+        setTimeout(() => {
+            startInterval = null
+            endInterval = null
+            updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
+            updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
+            updateWordCloud(data)
+            updateMDS(data)
+            xAxis.domain(d3.extent(flattenedData, d => d['date']))
+            ciao.transition().call(d3.axisBottom(xAxis))
 
-                area
-                    .select('.myArea')
-                    .transition()
-                    .attr("d", areaGenerator)
+            area
+                .select('.myArea')
+                .transition()
+                .attr("d", areaGenerator)
 
-                timeTrendPlot.selectAll(".tp-circle")
-                    .remove()
+            timeTrendPlot.selectAll(".tp-circle")
+                .remove()
 
-                timeTrendPlot.selectAll("dots")
-                    .data([dataPath])
-                    .enter()
-                    .append('g')
-                    .style("fill", "black")
-                    .selectAll("myPoints")
-                    .data(function (d) {
-                        return d;
-                    })
-                    .enter()
-                    .append("circle")
-                    .attr('class', 'tp-circle')
-                    .attr("cx", function (d) {
-                        return xAxis(d['date'])
-                    })
-                    .attr("cy", function (d) {
-                        return yAxis(d['close'])
-                    })
-                    .attr("r", 6)
-                    .attr("stroke", "white")
-                    .on("mouseover", (d) => {
-                        timeTooltip.show(d)
-                    })
-                    .on("mouseout", function (d) {
-                        timeTooltip.hide(d)
-                    })
-            }, 500)
-        });
+            timeTrendPlot.selectAll("dots")
+                .data([dataPath])
+                .enter()
+                .append('g')
+                .style("fill", "black")
+                .selectAll("myPoints")
+                .data(function (d) {
+                    return d;
+                })
+                .enter()
+                .append("circle")
+                .attr('class', 'tp-circle')
+                .attr("cx", function (d) {
+                    return xAxis(d['date'])
+                })
+                .attr("cy", function (d) {
+                    return yAxis(d['close'])
+                })
+                .attr("r", 6)
+                .attr("stroke", "white")
+                .on("mouseover", (d) => {
+                    timeTooltip.show(d)
+                })
+                .on("mouseout", function (d) {
+                    timeTooltip.hide(d)
+                })
+        }, 500)
     }
 
     // plot loaded notification
