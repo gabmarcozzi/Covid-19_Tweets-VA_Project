@@ -37,24 +37,29 @@ queue()
     .await(ready)
 
 function updateWorldMap(start, end) {
-    if(dbclick) {
+    if(!dbclick) {
         Object.assign(tweetsByCountryId, initialTweets)
     }
     else {
         const s = new Date(start)
         const e = new Date(end)
 
+        ende = new Date(e.getFullYear(), e.getMonth()+1, 1);
+        ende.setDate(en.getDate() - 1)
+        ende.setHours(23,59,00)
+
         Object.entries(tweetsByCountryId).forEach(([nation, tweets]) => {
             tw = []
             tweets.forEach(t => {
                 const curr = new Date(t.created_at)
-                if(curr >= s && curr <= e) {
+                if(curr >= s && curr <= ende) {
                     tw.push(t)
                 }
             })
             tweetsByCountryId[nation] = tw
         })
     }
+    console.log(tweetsByCountryId["ITA"])
 
 
     const selectNationForMap = function(d) {selectNation(d.id)}
