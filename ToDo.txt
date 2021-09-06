@@ -4,7 +4,7 @@
 - fix punti quando si fa brushing ######################################### FATTO
 - tooltip punti grafico in alto a destra ################################## FATTO
 - non permettere brushing più piccolo di 2 mesi ########################### FATTO
-- aggiustare dataset (marzo e febbraio)
+- aggiustare dataset (marzo e febbraio) ################################### FATTO
 - righe nere in primo piano ############################################### FATTO
 - cerchio loading centrato ################################################ FATTO
 - grafico media(e/o somma!!) grafici selezionati
