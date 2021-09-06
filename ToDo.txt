@@ -1,4 +1,4 @@
-- aggiustare visualizzazione ascisse quando si zoomma
+- aggiustare visualizzazione ascisse quando si zoomma ##################### FATTO
 - colori linee grafico in alto a destra
 - colori mappa del mondo
 - fix punti quando si fa brushing ######################################### FATTO
@@ -11,3 +11,4 @@
 - bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni) ########### FATTO
 - bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale #################### FATTO
 - numero di tweet indicati nella world map devo coincidere col numero di tweet nel grafico in alto a destra ############### FATTO
+- bottone switch day/month

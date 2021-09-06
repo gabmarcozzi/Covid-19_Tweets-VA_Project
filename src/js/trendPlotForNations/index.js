@@ -82,6 +82,37 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
         var newValues = []
 
+        var months = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        monthsFound = []
+    
+        value.forEach(v => {
+            aDate = new Date(v["date"])
+            if(!monthsFound.includes(aDate.getMonth()))
+                monthsFound.push(aDate.getMonth())
+        })
+
+        let difference = months.filter(x => !monthsFound.includes(x));
+
+        var i = 0;
+        while(i < difference.length) {
+            var insert;
+
+            if(difference[i] == 0) {
+                insert = {
+                    date: new Date(2021, 0, 1),
+                    close: 0
+                }
+            }
+            else {
+                insert = {
+                    date: new Date(2020, difference[i], 1),
+                    close: 0
+                }
+            }
+            dataPaths[key].push(insert)
+            i =  i + 1
+        }
+        
         while (currDate.getTime() != ending.getTime()) {
             found = false
             value.forEach(v => {
