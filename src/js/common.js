@@ -244,7 +244,7 @@ const selectNation = (key) => {
         .duration(500)
         .style("stroke", "black")
     }
-    
+    updateButtons()
     updateNationPlot(x.domain()[0], x.domain()[1])
 }
 
@@ -981,3 +981,31 @@ window.addEventListener('loaded', event => {
         $("#loadedPage").show()
     }
 }, false)
+
+function updateButtons() {
+    count = 0;
+    selectedNations.forEach(elem => {
+        if(elem != "")
+            count = count + 1;
+    })
+
+    if(count > 1) {
+        $("#button-sum")
+          .addClass('mds-button')
+          .prop('disabled', false)
+          
+        $("#button-avg")
+          .addClass('mds-button')
+          .prop('disabled', false)
+    }
+    else {
+        $("#button-sum")
+          .removeClass('mds-button')
+          .prop('disabled', true)
+        
+        $("#button-avg")
+          .removeClass('mds-button')
+          .prop('disabled', true)
+    }
+}
+
