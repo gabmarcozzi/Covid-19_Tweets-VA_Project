@@ -148,6 +148,15 @@
     transition: all 0.2s;
 }
 
+.sum-pos {
+    margin-top: 10px;
+}
+
+.avg-pos {
+    margin-top: 10px;
+    left: 53%;
+}
+
 .mds-pos {
     left:80%;
 }

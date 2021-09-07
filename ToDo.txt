@@ -1,14 +1,14 @@
-- aggiustare visualizzazione ascisse quando si zoomma ##################### FATTO
+DONE - aggiustare visualizzazione ascisse quando si zoomma
 - colori linee grafico in alto a destra
 - colori mappa del mondo
-- fix punti quando si fa brushing ######################################### FATTO
-- tooltip punti grafico in alto a destra ################################## FATTO
-- non permettere brushing più piccolo di 2 mesi ########################### FATTO
-- aggiustare dataset (marzo e febbraio) ################################### FATTO
-- righe nere in primo piano ############################################### FATTO
-- cerchio loading centrato ################################################ FATTO
+DONE - fix punti quando si fa brushing
+DONE - tooltip punti grafico in alto a destra
+DONE - non permettere brushing più piccolo di 2 mesi
+DONE - aggiustare dataset (marzo e febbraio)
+DONE - righe nere in primo piano
+DONE - cerchio loading centrato
 - grafico media(e/o somma!!) grafici selezionati
-- bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni) ########### FATTO
-- bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale #################### FATTO
-- numero di tweet indicati nella world map devo coincidere col numero di tweet nel grafico in alto a destra ############### FATTO
+DONE - bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni)
+DONE - bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale
+DONE - numero di tweet indicati nella world map devo coincidere col numero di tweet nel grafico in alto a destra
 - bottone switch day/month

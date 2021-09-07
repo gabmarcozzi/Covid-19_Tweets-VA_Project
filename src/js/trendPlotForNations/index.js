@@ -28,7 +28,7 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("div")
     .append("svg")
     .attr("width", "100%")
-    .attr("height", "100%")
+    .attr("height", "90%")
     .attr("viewBox", "0 0 800 552")
     .append("g")
     .attr("transform",
