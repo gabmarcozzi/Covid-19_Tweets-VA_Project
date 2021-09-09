@@ -1398,7 +1398,7 @@ function initializeAVG() {
         if(month != 0) {
             insert = {
                 date: new Date(2020, month, 1),
-                close: value/count
+                close: toFixedIfNecessary(value/count, 2)
             }
             avgPath.push(insert)
         }
@@ -1407,7 +1407,7 @@ function initializeAVG() {
     if(variable[0]) {
         insert = {
             date: new Date(2021, 0, 1),
-            close: variable[0]/count
+            close: toFixedIfNecessary(variable[0]/count, 2)
         }
 
         avgPath.push(insert)
@@ -1430,3 +1430,7 @@ function deleteAVG() {
     avgPath = []
     updateNationPlot(x.domain()[0], x.domain()[1])
 }
+
+function toFixedIfNecessary(value, dp){
+    return +parseFloat(value).toFixed(dp);
+  }
