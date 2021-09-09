@@ -6,7 +6,16 @@ nationsTrendHeight = d3.select("#nationsTrendPlot").node().getBoundingClientRect
 nationTooltip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
-    .html(nationName => `<strong>Country: </strong><span class='details'> ${nationName}`)
+    .html(function(nationName) {
+        if(nationName == "SUM") {
+            return `<strong>Sum of Countries: </strong><span class='details'> ` + nationSUM.toString()
+        }
+        else if(nationName == "AVG") {
+            return `<strong>Avg of Countries: </strong><span class='details'> ` + nationAVG.toString()
+        }
+        else
+            return `<strong>Country: </strong><span class='details'> ${nationName}`
+    })
 
 // initialize tooltips
 nationTooltipDot = d3.tip()
@@ -14,10 +23,10 @@ nationTooltipDot = d3.tip()
     .offset([-10, 0])
     .html(function(d, nationName) {
         if(nationName == "SUM") {
-            return `<strong>SUM of Countries: </strong><span class='details'> ` + nationSUM.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
+            return `<strong>Sum of Countries: </strong><span class='details'> ` + nationSUM.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
         }
         else if(nationName == "AVG") {
-            return `<strong>AVG of Countries: </strong><span class='details'> ` + nationAVG.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
+            return `<strong>Avg of Countries: </strong><span class='details'> ` + nationAVG.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
         }
         else
             return `<strong>Country: </strong><span class='details'> ${nationName}` + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
