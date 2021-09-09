@@ -10,6 +10,12 @@
     stroke-width: 3px;
 }
 
+.line-avg {
+    fill: none;
+    stroke: darkblue;
+    stroke-width: 3px;
+}
+
 .line-gab {
     fill: none;
     stroke: yellow;

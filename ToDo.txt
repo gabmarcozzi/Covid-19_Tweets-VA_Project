@@ -7,7 +7,7 @@ DONE - non permettere brushing più piccolo di 2 mesi
 DONE - aggiustare dataset (marzo e febbraio)
 DONE - righe nere in primo piano
 DONE - cerchio loading centrato
-- grafico media(e/o somma!!) grafici selezionati
+DONE - grafico media(e/o somma!!) grafici selezionati
 DONE - bug grafico destra quando non viene selezionata nessuna nazione si rimane al livello di zoom in cui si è attualmente (dovrebbe tornare a mostrare tutte quante le nazioni)
 DONE - bug grafico brushing: se si fa doppio click per tornare indietro appaiono punti neri (come quelli lungo la linea) posizionati in modo casuale
 DONE - numero di tweet indicati nella world map devo coincidere col numero di tweet nel grafico in alto a destra

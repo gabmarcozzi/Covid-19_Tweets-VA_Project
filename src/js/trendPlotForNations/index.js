@@ -16,6 +16,9 @@ nationTooltipDot = d3.tip()
         if(nationName == "SUM") {
             return `<strong>SUM of Countries: </strong><span class='details'> ` + nationSUM.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
         }
+        else if(nationName == "AVG") {
+            return `<strong>AVG of Countries: </strong><span class='details'> ` + nationAVG.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
+        }
         else
             return `<strong>Country: </strong><span class='details'> ${nationName}` + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
     }) 
@@ -227,8 +230,15 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 // }
 $("#button-sum").click(() => {
     sum = true
-    buttonClicked = true
+    sumButtonClicked = true
     updateNationPlot(x.domain()[0], x.domain()[1])
-    buttonClicked = false
+    sumButtonClicked = false
+})
+
+$("#button-avg").click(() => {
+    avg = true
+    avgButtonClicked = true
+    updateNationPlot(x.domain()[0], x.domain()[1])
+    avgButtonClicked = false
 })
 

@@ -758,96 +758,94 @@ const flattenedData = [];
 
 function updateNationPlot(start, end) {
     var bool = false;
-    // x.domain(d3.extent(flattenedData, d => d['date']))
-    // y.domain([0, d3.max(flattenedData, d => d['close'])])
-    if (new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
-        // x.domain(d3.extent(flattenedData, d => d['date']))
-        // //console.log("AOOO")
-        // if(sum) {
-        //     initializeSUM()
-        //     var max1 = d3.max(flattenedData, d => d['close'])
-        //     if(sumHeight > max1) {
-        //         y.domain([0, sumHeight])
-        //     }
-        //     else {
-        //         y.domain([0, max1])
-        //     }
-            
-        // }
-        // else {
-        //     y.domain([0, d3.max(flattenedData, d => d['close'])])
-        // }
-        
+    if(new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
         bool = true
+        x.domain(d3.extent(flattenedData, d => d['date']))
     }
-    //else {
-        if(bool) {
-            x.domain(d3.extent(flattenedData, d => d['date']))
-        }
-        else {
-            x.domain([new Date(start), new Date(end)])
-        }
+    else {
+        x.domain([new Date(start), new Date(end)])
+    }
 
-        var a = {};
-        Object.entries(dataPaths).forEach(([key, value]) => {
-            //console.log("AO SGHI")
-            //console.log(value['date'])
-            value.forEach(v => {
-                //console.log(v['date'])
-                dataInside = new Date(v['date'])
-                s = new Date(start)
-                //s.setDate(s.getDate() - 1)
-                e = new Date(end)
+    var a = {};
+    Object.entries(dataPaths).forEach(([key, value]) => {
+        //console.log("AO SGHI")
+        //console.log(value['date'])
+        value.forEach(v => {
+            //console.log(v['date'])
+            dataInside = new Date(v['date'])
+            s = new Date(start)
+            //s.setDate(s.getDate() - 1)
+            e = new Date(end)
 
-                if(dataInside >= s && dataInside <= e) {
-                    if(a[key]) a[key].push(v)
-                    else
-                        a[key] = [v]
-                }
-            })
-        })
-
-        var max = 0;
-        emptyList = true;
-        selectedNations.forEach(elem => {
-            if(elem != "")
-                emptyList = false;
-        })
-        if(!emptyList) {
-            console.log("Entro in 1")
-            selectedNations.forEach(elem => {
-                if(a[elem]) {
-                    a[elem].forEach(v => {
-                        if(v["close"] > max)
-                            max = v["close"]
-                    })
-                }
-            })
-            console.log(max)
-            if(max > 0) {
-                if(sum) {
-                    initializeSUM();
-                    if(sumHeight > max) {
-                        y.domain([0, sumHeight])
-                    }
-                   else
-                        y.domain([0, max])
-                }
-                else {
-                    y.domain([0, max])
-                }
-                
+            if(dataInside >= s && dataInside <= e) {
+                if(a[key]) a[key].push(v)
+                else
+                    a[key] = [v]
             }
+        })
+    })
+
+    var max = 0;
+    emptyList = true;
+    selectedNations.forEach(elem => {
+        if(elem != "")
+            emptyList = false;
+    })
+    if(!emptyList) {
+        console.log("Entro in 1")
+        selectedNations.forEach(elem => {
+            if(a[elem]) {
+                a[elem].forEach(v => {
+                    if(v["close"] > max)
+                        max = v["close"]
+                })
+            }
+        })
+        console.log(max)
+        if(max > 0) {
+            if(sum) {
+                initializeSUM();
+                if(sumHeight > max) {
+                    y.domain([0, sumHeight])
+                }
+                else
+                    y.domain([0, max])
+
+                if(avg) 
+                    initializeAVG();
+            }
+            else if(avg) {
+                initializeAVG();
+                if(avgHeight > max) {
+                    y.domain([0, avgHeight])
+                }
+                else
+                    y.domain([0, max])
+
+            }
+                
+            else {
+                y.domain([0, max])
+            }
+            
         }
-        else if(sum) {
-            console.log("Entro in 2")
-            initializeSUM();
-            y.domain([0, sumHeight])
-        }
-        else {
-            y.domain([0, d3.max(flattenedData, d => d['close'])])
-        }
-    //}
+    }
+    else if(sum) {
+        console.log("Entro in 2")
+        initializeSUM();
+        y.domain([0, sumHeight])
+
+        if(avg)
+            initializeAVG();
+    }
+    else if(avg) {
+        console.log("Entro in 3")
+        initializeAVG();
+        y.domain([0, avgHeight])
+    }
+    else {
+        y.domain([0, d3.max(flattenedData, d => d['close'])])
+    }
 
     nationsTrendPlot.selectAll("*").remove();
     
@@ -937,6 +935,29 @@ function updateNationPlot(start, end) {
             //     nationTooltip.hide("SUM")
             // })
             .on("click", deleteSUM)
+    }
+
+    if(avg) {
+        console.log("sto per printare la avg function")
+        console.log("avgHeight: " + sumHeight)
+        console.log("nationAVG: " + nationSUM)
+        console.log("avgPath: " + sumPath)
+        nationsTrendPlot.append("path")
+            .data([avgPath])
+            .attr("class", "line-avg")
+            .attr("id", `trend-AVG`)
+            .attr("d", valueline)
+            // .on('mouseover', () => {
+
+            //     document.addEventListener('mousemove', trendMouseEventHandler, true)
+
+            //     nationTooltip.show("SUM")
+            // })
+            // .on('mouseout', () => {
+            //     document.removeEventListener('mousemove', trendMouseEventHandler, true)
+            //     nationTooltip.hide("SUM")
+            // })
+            .on("click", deleteAVG)
     }
 
     nationsTrendPlot.append("g")
@@ -1046,6 +1067,27 @@ function updateNationPlot(start, end) {
                     nationTooltipDot.hide(d, 'SUM')
                 });
         }
+        if(avg) {
+            nationsTrendPlot.selectAll("dots")
+                .data([avgPath])
+                .enter()
+                .append('g')
+                .style("fill", "black")
+                .selectAll("myPoints2")
+                .data(function(d){ return d; })
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return x(d['date']) } )
+                .attr("cy", function(d) { return y(d['close']) } )
+                .attr("r", 4)
+                .attr("stroke", "white")
+                .on("mouseover", (d) => {
+                    nationTooltipDot.show(d, 'AVG')
+                })
+                .on("mouseout", function(d) {
+                    nationTooltipDot.hide(d, 'AVG')
+                });
+        }
     })
 
     // plot loaded notification
@@ -1102,12 +1144,12 @@ var sum = false
 var sumHeight = 0
 var nationSUM = []
 var sumPath = []
-var buttonClicked = false
+var sumButtonClicked = false
 
 function initializeSUM() {
     console.log("initializeSUM() called")
     var ab = []
-    if(buttonClicked) {
+    if(sumButtonClicked) {
         nationSUM = []
         sumPath = []
     }
@@ -1289,5 +1331,102 @@ function deleteSUM() {
     sumHeight = 0
     nationSUM = []
     sumPath = []
+    updateNationPlot(x.domain()[0], x.domain()[1])
+}
+
+var avg = false
+var avgHeight = 0
+var nationAVG = []
+var avgPath = []
+var avgButtonClicked = false
+
+function initializeAVG() {
+    console.log("initializeAVG() called")
+    var ab = []
+    if(avgButtonClicked) {
+        nationAVG = []
+        avgPath = []
+    }
+    if(nationAVG.length == 0) {
+        console.log("dataPaths: " + dataPaths)
+        Object.entries(dataPaths).forEach(([key, value]) => {
+            if(selectedNations.includes(key)) {
+                nationAVG.push(key)
+                console.log("value: " + value)
+                value.forEach(v => {
+                    dataInside = new Date(v['date'])
+                    if(dataInside >= x.domain()[0] && dataInside <= x.domain()[1]) {
+                        console.log("v: " + v)
+                        ab.push(v);
+                    }
+                })
+            }
+        })
+    }
+    else {
+        Object.entries(dataPaths).forEach(([key, value]) => {
+            if(nationAVG.includes(key)) {
+                value.forEach(v => {
+                    dataInside = new Date(v['date'])
+                    if(dataInside >= x.domain()[0] && dataInside <= x.domain()[1]) {
+                        ab.push(v);
+                    }
+                })
+            }
+        })
+    }
+
+    var variable = {};
+    ab.forEach(d => {
+        if(variable[d['date'].getMonth()]) {
+            variable[d['date'].getMonth()] += d['close']
+        }
+        else {
+            variable[d['date'].getMonth()] = d['close']
+        }
+    })
+
+    var count = 0;
+    nationAVG.forEach(elem => {
+        if(elem != "")
+            count = count + 1;
+    })
+
+    console.log(variable)
+    avgPath = []
+    Object.entries(variable).forEach(([month, value]) => {
+        if(month != 0) {
+            insert = {
+                date: new Date(2020, month, 1),
+                close: value/count
+            }
+            avgPath.push(insert)
+        }
+    })
+
+    if(variable[0]) {
+        insert = {
+            date: new Date(2021, 0, 1),
+            close: variable[0]/count
+        }
+
+        avgPath.push(insert)
+    }
+    console.log(avgPath)
+
+    avgHeight = 0
+    avgPath.forEach(elem => {
+        if(elem['close'] > avgHeight)
+        avgHeight = elem['close']
+    })
+
+    console.log("avgHeight in initializeSUM(): " + avgHeight)
+}
+
+function deleteAVG() {
+    avg = false;
+    avgHeight = 0
+    nationAVG = []
+    avgPath = []
     updateNationPlot(x.domain()[0], x.domain()[1])
 }
