@@ -4,6 +4,12 @@
     stroke-width: 3px;
 }
 
+.line-sum {
+    fill: none;
+    stroke: orangered;
+    stroke-width: 3px;
+}
+
 .line-gab {
     fill: none;
     stroke: yellow;

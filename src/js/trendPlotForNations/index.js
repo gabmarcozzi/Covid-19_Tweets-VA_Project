@@ -13,7 +13,11 @@ nationTooltipDot = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d, nationName) {
-        return `<strong>Country: </strong><span class='details'> ${nationName}` + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
+        if(nationName == "SUM") {
+            return `<strong>SUM of Countries: </strong><span class='details'> ` + nationSUM.toString() + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
+        }
+        else
+            return `<strong>Country: </strong><span class='details'> ${nationName}` + "<br></span>" + "<strong>Month: </strong><span class='details'>" + conv(d['date'].getMonth()) + "<br></span>" + `<strong># of Tweets: </strong><span class='details'> ${d['close']}`
     }) 
 
 // set the ranges
@@ -75,7 +79,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         if (dataPaths[nation]) perPeriodValues.forEach(v => dataPaths[nation].push(v))
         else dataPaths[nation] = perPeriodValues
     })
-
+    console.log("DATAPATTESE: " + dataPaths)
     Object.entries(dataPaths).forEach(([key, value]) => {
         var currDate = new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)")
         var ending = new Date("Mon Feb 01 2021 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)")
@@ -216,3 +220,15 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     const loaded = new Event('loaded')
     window.dispatchEvent(loaded)
 })
+
+// d3.select("#button-sum").on("click", bella);
+// function bella() {
+//     console.log("bello zi")
+// }
+$("#button-sum").click(() => {
+    sum = true
+    buttonClicked = true
+    updateNationPlot(x.domain()[0], x.domain()[1])
+    buttonClicked = false
+})
+

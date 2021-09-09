@@ -214,7 +214,7 @@ const selectNation = (key) => {
         .duration(500)
         .style("stroke", "rgba(29, 161, 242, 0.2)")
         
-        console.log("Print list: " + selectedNations)
+        //console.log("Print list: " + selectedNations)
         
         emptyList = true;
         selectedNations.forEach(elem => {
@@ -761,16 +761,35 @@ function updateNationPlot(start, end) {
     // x.domain(d3.extent(flattenedData, d => d['date']))
     // y.domain([0, d3.max(flattenedData, d => d['close'])])
     if (new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
-        x.domain(d3.extent(flattenedData, d => d['date']))
-        y.domain([0, d3.max(flattenedData, d => d['close'])])
+        // x.domain(d3.extent(flattenedData, d => d['date']))
+        // //console.log("AOOO")
+        // if(sum) {
+        //     initializeSUM()
+        //     var max1 = d3.max(flattenedData, d => d['close'])
+        //     if(sumHeight > max1) {
+        //         y.domain([0, sumHeight])
+        //     }
+        //     else {
+        //         y.domain([0, max1])
+        //     }
+            
+        // }
+        // else {
+        //     y.domain([0, d3.max(flattenedData, d => d['close'])])
+        // }
+        
         bool = true
     }
-    else {
-        x.domain([new Date(start), new Date(end)])
+    //else {
+        if(bool) {
+            x.domain(d3.extent(flattenedData, d => d['date']))
+        }
+        else {
+            x.domain([new Date(start), new Date(end)])
+        }
 
         var a = {};
         Object.entries(dataPaths).forEach(([key, value]) => {
-
             //console.log("AO SGHI")
             //console.log(value['date'])
             value.forEach(v => {
@@ -789,7 +808,13 @@ function updateNationPlot(start, end) {
         })
 
         var max = 0;
-        if(selectedNations.length > 0) {
+        emptyList = true;
+        selectedNations.forEach(elem => {
+            if(elem != "")
+                emptyList = false;
+        })
+        if(!emptyList) {
+            console.log("Entro in 1")
             selectedNations.forEach(elem => {
                 if(a[elem]) {
                     a[elem].forEach(v => {
@@ -799,10 +824,30 @@ function updateNationPlot(start, end) {
                 }
             })
             console.log(max)
-            if(max > 0)
-                y.domain([0, max])
+            if(max > 0) {
+                if(sum) {
+                    initializeSUM();
+                    if(sumHeight > max) {
+                        y.domain([0, sumHeight])
+                    }
+                   else
+                        y.domain([0, max])
+                }
+                else {
+                    y.domain([0, max])
+                }
+                
+            }
         }
-    }
+        else if(sum) {
+            console.log("Entro in 2")
+            initializeSUM();
+            y.domain([0, sumHeight])
+        }
+        else {
+            y.domain([0, d3.max(flattenedData, d => d['close'])])
+        }
+    //}
 
     nationsTrendPlot.selectAll("*").remove();
     
@@ -871,12 +916,36 @@ function updateNationPlot(start, end) {
         }
     })
 
+    if(sum) {
+        console.log("sto per printare la sum function")
+        console.log("sumHeight: " + sumHeight)
+        console.log("nationSUM: " + nationSUM)
+        console.log("sumPath: " + sumPath)
+        nationsTrendPlot.append("path")
+            .data([sumPath])
+            .attr("class", "line-sum")
+            .attr("id", `trend-SUM`)
+            .attr("d", valueline)
+            // .on('mouseover', () => {
+
+            //     document.addEventListener('mousemove', trendMouseEventHandler, true)
+
+            //     nationTooltip.show("SUM")
+            // })
+            // .on('mouseout', () => {
+            //     document.removeEventListener('mousemove', trendMouseEventHandler, true)
+            //     nationTooltip.hide("SUM")
+            // })
+            .on("click", deleteSUM)
+    }
+
     nationsTrendPlot.append("g")
         .attr("transform", "translate(0," + nationsTrendHeight + ")")
         .call(d3.axisBottom(x))
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
+    
 
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach(nation => {
@@ -956,6 +1025,27 @@ function updateNationPlot(start, end) {
                     });
             }
         }
+        if(sum) {
+            nationsTrendPlot.selectAll("dots")
+                .data([sumPath])
+                .enter()
+                .append('g')
+                .style("fill", "black")
+                .selectAll("myPoints2")
+                .data(function(d){ return d; })
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return x(d['date']) } )
+                .attr("cy", function(d) { return y(d['close']) } )
+                .attr("r", 4)
+                .attr("stroke", "white")
+                .on("mouseover", (d) => {
+                    nationTooltipDot.show(d, 'SUM')
+                })
+                .on("mouseout", function(d) {
+                    nationTooltipDot.hide(d, 'SUM')
+                });
+        }
     })
 
     // plot loaded notification
@@ -1008,4 +1098,196 @@ function updateButtons() {
           .prop('disabled', true)
     }
 }
+var sum = false
+var sumHeight = 0
+var nationSUM = []
+var sumPath = []
+var buttonClicked = false
 
+function initializeSUM() {
+    console.log("initializeSUM() called")
+    var ab = []
+    if(buttonClicked) {
+        nationSUM = []
+        sumPath = []
+    }
+    if(nationSUM.length == 0) {
+        console.log("dataPaths: " + dataPaths)
+        Object.entries(dataPaths).forEach(([key, value]) => {
+            if(selectedNations.includes(key)) {
+                nationSUM.push(key)
+                console.log("value: " + value)
+                value.forEach(v => {
+                    dataInside = new Date(v['date'])
+                    if(dataInside >= x.domain()[0] && dataInside <= x.domain()[1]) {
+                        console.log("v: " + v)
+                        ab.push(v);
+                    }
+                })
+            }
+        })
+    }
+    else {
+        Object.entries(dataPaths).forEach(([key, value]) => {
+            if(nationSUM.includes(key)) {
+                value.forEach(v => {
+                    dataInside = new Date(v['date'])
+                    if(dataInside >= x.domain()[0] && dataInside <= x.domain()[1]) {
+                        ab.push(v);
+                    }
+                })
+            }
+        })
+    }
+
+    var variable = {};
+    ab.forEach(d => {
+        if(variable[d['date'].getMonth()]) {
+            variable[d['date'].getMonth()] += d['close']
+        }
+        else {
+            variable[d['date'].getMonth()] = d['close']
+        }
+    })
+
+    console.log(variable)
+    sumPath = []
+    Object.entries(variable).forEach(([month, value]) => {
+        if(month != 0) {
+            insert = {
+                date: new Date(2020, month, 1),
+                close: value
+            }
+            sumPath.push(insert)
+        }
+    })
+
+    if(variable[0]) {
+        insert = {
+            date: new Date(2021, 0, 1),
+            close: variable[0]
+        }
+
+        sumPath.push(insert)
+    }
+    console.log(sumPath)
+
+    sumHeight = 0
+    sumPath.forEach(elem => {
+        if(elem['close'] > sumHeight)
+        sumHeight = elem['close']
+    })
+
+    console.log("sumHeight in initializeSUM(): " + sumHeight)
+}
+// function computeSUM() {
+//     if(!sum) {
+//         var startX = x.domain()[0]
+//         var endX = x.domain()[1]
+
+//         var a = []
+//         if(nationSUM.length > 0) {
+//             Object.entries(dataPaths).forEach(([key, value]) => {
+//                 if(nationSUM.includes(key)) {
+//                     //nationSUM.push(key)
+//                     value.forEach(v => {
+//                         dataInside = new Date(v['date'])
+//                         if(dataInside >= startX && dataInside <= endX) {
+//                             a.push(v);
+//                         }
+//                     })
+//                 }
+//             })
+//         }
+//         else {
+//             Object.entries(dataPaths).forEach(([key, value]) => {
+//                 if(selectedNations.includes(key)) {
+//                     nationSUM.push(key)
+//                     value.forEach(v => {
+//                         dataInside = new Date(v['date'])
+//                         if(dataInside >= startX && dataInside <= endX) {
+//                             a.push(v);
+//                         }
+//                     })
+//                 }
+//             })
+//         }
+        
+
+//         var variable = {}
+//         a.forEach(d => {
+//             if(variable[d['date'].getMonth()]) {
+//                 variable[d['date'].getMonth()] += d['close']
+//             }
+//             else {
+//                 variable[d['date'].getMonth()] = d['close']
+//             }
+//         })
+
+//         b = [];
+
+//         Object.entries(variable).forEach(([month, value]) => {
+//             if(month != 0) {
+//                 insert = {
+//                     date: new Date(2020, month, 1),
+//                     close: value
+//                 }
+//                 b.push(insert)
+//             }
+//             // if(insert['date'].getMonth() == 0)
+//             //     insert['date'].setFullYear(2021)
+//         })
+
+//         if(variable[0]) {
+//             insert = {
+//                 date: new Date(2021, 0, 1),
+//                 close: variable[0]
+//             }
+
+//             b.push(insert)
+//         } 
+
+//         sumHeight = 0;
+//         b.forEach(elem => {
+//             if(elem['close'] > sumHeight)
+//             sumHeight = elem['close']
+//         })
+
+//         sum = true
+//         callingFromComputeSUM = true
+//         updateNationPlot(startX, endX)
+//         callingFromComputeSUM = false
+
+//         console.log(b)
+//         nationsTrendPlot.append("path")
+//             .data([b])
+//             .attr("class", "line-sum")
+//             .attr("id", `trend-SUM`)
+//             .attr("d", valueline)
+//             // .on('mouseover', () => {
+
+//             //     document.addEventListener('mousemove', trendMouseEventHandler, true)
+
+//             //     nationTooltip.show("SUM")
+//             // })
+//             // .on('mouseout', () => {
+//             //     document.removeEventListener('mousemove', trendMouseEventHandler, true)
+//             //     nationTooltip.hide("SUM")
+//             // })
+//             .on("click", deleteSUM)
+
+//         nationsTrendPlot.append("g")
+//             .call(d3.axisLeft(y))
+//     }
+//     else {
+//         deleteSUM()
+//     }
+// }
+
+function deleteSUM() {
+    sum = false;
+    sumHeight = 0
+    nationSUM = []
+    sumPath = []
+    updateNationPlot(x.domain()[0], x.domain()[1])
+}
