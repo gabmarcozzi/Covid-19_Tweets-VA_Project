@@ -171,16 +171,18 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .attr("id", `trend-${key}`)
             .attr("d", valueline)
             .on('mouseover', () => {
-
                 document.addEventListener('mousemove', trendMouseEventHandler, true)
-
                 nationTooltip.show(idToNation[key])
             })
             .on('mouseout', () => {
                 document.removeEventListener('mousemove', trendMouseEventHandler, true)
                 nationTooltip.hide(key)
             })
-            .on("click", selectNationForTrend)
+            .on("click", () => {
+                selectNationForTrend();
+                document.removeEventListener('mousemove', trendMouseEventHandler, true)
+                nationTooltip.hide(key)
+            })
     })
 
     // Add the X Axis

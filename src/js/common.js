@@ -865,16 +865,19 @@ function updateNationPlot(start, end) {
             .attr("id", `trend-${key}`)
             .attr("d", valueline)
             .on('mouseover', () => {
-
                 document.addEventListener('mousemove', trendMouseEventHandler, true)
-
                 nationTooltip.show(idToNation[key])
             })
             .on('mouseout', () => {
                 document.removeEventListener('mousemove', trendMouseEventHandler, true)
                 nationTooltip.hide(key)
             })
-            .on("click", selectNationForTrend);
+            .on("click", () => {
+                selectNationForTrend();
+                document.removeEventListener('mousemove', trendMouseEventHandler, true)
+                nationTooltip.hide(key)
+            })
+            //.on("click", selectNationForTrend);
         }
         else {
             var a = [];
@@ -901,16 +904,19 @@ function updateNationPlot(start, end) {
                 .attr("id", `trend-${key}`)
                 .attr("d", valueline)
                 .on('mouseover', () => {
-
                     document.addEventListener('mousemove', trendMouseEventHandler, true)
-
                     nationTooltip.show(idToNation[key])
                 })
                 .on('mouseout', () => {
                     document.removeEventListener('mousemove', trendMouseEventHandler, true)
                     nationTooltip.hide(key)
                 })
-                .on("click", selectNationForTrend)
+                .on("click", () => {
+                    selectNationForTrend();
+                    document.removeEventListener('mousemove', trendMouseEventHandler, true)
+                    nationTooltip.hide(key)
+                })
+                //.on("click", selectNationForTrend)
         }
     })
 
@@ -925,16 +931,19 @@ function updateNationPlot(start, end) {
             .attr("id", `trend-SUM`)
             .attr("d", valueline)
             .on('mouseover', () => {
-
                 document.addEventListener('mousemove', trendMouseEventHandler, true)
-
                 nationTooltip.show("SUM")
             })
             .on('mouseout', () => {
                 document.removeEventListener('mousemove', trendMouseEventHandler, true)
                 nationTooltip.hide("SUM")
             })
-            .on("click", deleteSUM)
+            .on("click", () => {
+                deleteSUM();
+                document.removeEventListener('mousemove', trendMouseEventHandler, true)
+                nationTooltip.hide("SUM")
+            })
+            //.on("click", deleteSUM)
     }
 
     if(avg) {
@@ -948,16 +957,19 @@ function updateNationPlot(start, end) {
             .attr("id", `trend-AVG`)
             .attr("d", valueline)
             .on('mouseover', () => {
-
                 document.addEventListener('mousemove', trendMouseEventHandler, true)
-
                 nationTooltip.show("AVG")
             })
             .on('mouseout', () => {
                 document.removeEventListener('mousemove', trendMouseEventHandler, true)
                 nationTooltip.hide("AVG")
             })
-            .on("click", deleteAVG)
+            .on("click", () => {
+                deleteAVG();
+                document.removeEventListener('mousemove', trendMouseEventHandler, true)
+                nationTooltip.hide("AVG")
+            })
+            //.on("click", deleteAVG)
     }
 
     nationsTrendPlot.append("g")
