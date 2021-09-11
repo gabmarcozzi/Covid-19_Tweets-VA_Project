@@ -122,10 +122,7 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         return [parseInt(d.retweet_count), parseInt(d.user_friends_count), tokenizedTweets[i].length, moment(d.created_at).valueOf()]
     })
 
-    // FIXME
-    //const cutMatrix = tweetsMatrix.slice(0, 5000)
     const cutMatrix = downsampleData(tweetsMatrix)
-    console.log(cutMatrix.length)
 
     const druidMDS = new druid.MDS(cutMatrix)
 

@@ -47,20 +47,17 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     // Maintain a dictionary for each path you want to draw
     var dataPath = [];
     const perPeriodData = aggregateForPeriod(tweets, 'month')
-    //console.log(perPeriodData)
     const perPeriodValues = Object.entries(perPeriodData).map(([time, count]) => ({
         date: parseTimePlot(time),
         close: count
     }))
 
     perPeriodValues.forEach(v => dataPath.push(v))
-    //console.log(dataPath)
 
     const flattenedData = []
     Object.values(dataPath).forEach(d => {
         flattenedData.push(d)
     })
-    //console.log(flattenedData)
 
 
     // Scale the range of the data
@@ -97,6 +94,16 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 resetView()
             } else {
                 loadedViews = 2
+
+                let startInterval, endInterval
+                try {
+                    [startInterval, endInterval] = dateFromExtent(extent)
+                }
+                catch(e) {
+                    console.error('Interval is less than one month, extend the brushing area')
+                    return
+                }
+
                 $("#loadedPage").hide()
                 $("#loader").show()
 
@@ -109,7 +116,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                     .prop('disabled', false)
 
                 setTimeout(() => {
-                    updateChart(extent)
+                    updateChart(startInterval, endInterval)
                 }, 500)
                 dbclick = true
             }
@@ -178,88 +185,80 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         })
         .on("mouseout", function (d) {
             timeTooltip.hide(d)
-        });
+        })
 
-    // A function that update the chart for given boundaries
-    function updateChart(extent) {
+    function dateFromExtent(extent) {
         s = new Date(xAxis.invert(extent[0]))
         s.setHours(00, 00, 00)
 
         e = new Date(xAxis.invert(extent[1]))
         e.setHours(23, 59, 00)
 
-        var count = 0;
-        dateList.forEach(date => {
-            if (date >= s && date <= e) {
-                count = count + 1;
-            }
+        const startDay = s.getDate()
+        const startMonth = s.getMonth()
 
-        })
+        st = new Date(s.getFullYear(), startDay > 15 ? startMonth+1 : startMonth, 1)
+        st.setHours(00, 00, 00)
 
-        if (count >= 2) {
-            if (s.getDate() > 1) {
-                st = new Date(s.getFullYear(), s.getMonth() + 1, 1);
-                st.setHours(00, 00, 00)
-            } else {
-                st = new Date(s.getFullYear(), s.getMonth(), 1);
-                st.setHours(00, 00, 00)
-            }
+        en = new Date(e.getFullYear(), e.getMonth(), 1)
+        en.setHours(00, 00, 00)
 
+        if(Math.abs(st.getMonth() - en.getMonth()) < 1) throw Error()
 
-            en = new Date(e.getFullYear(), e.getMonth(), 1);
-            en.setHours(00, 00, 00)
+        return [st, en]
+    }
 
-            startInterval = st
-            endInterval = en
-            xAxis.domain([st, en])
+    // A function that update the chart for given boundaries
+    function updateChart(st, en) {
 
-            area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        xAxis.domain([st, en])
 
-            updateWorldMap(st, en)
-            updateNationPlot(st, en)
+        area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
 
-            // Update axis and area position
-            ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
-            area
-                .select('.myArea')
-                .transition()
-                .duration(1000)
-                .attr("d", areaGenerator)
+        updateWorldMap(st, en)
+        updateNationPlot(st, en)
 
-            timeTrendPlot.selectAll(".tp-circle")
-                .remove()
+        // Update axis and area position
+        ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
+        area
+            .select('.myArea')
+            .transition()
+            .duration(1000)
+            .attr("d", areaGenerator)
 
-            timeTrendPlot.selectAll("dots")
-                .data([dataPath])
-                .enter()
-                .append('g')
-                .style("fill", "black")
-                .selectAll("myPoints")
-                .data(function (d) {
-                    return d;
-                })
-                .enter()
-                .append("circle")
-                .attr('class', 'tp-circle')
-                .transition()
-                .attr("cx", function (d) {
-                    return xAxis(d['date'])
-                })
-                .attr("cy", function (d) {
-                    return yAxis(d['close'])
-                })
-                .attr("r", 6)
-                .attr("stroke", "white")
-                .duration(1000)
+        timeTrendPlot.selectAll(".tp-circle")
+            .remove()
 
-            timeTrendPlot.selectAll(".tp-circle")
-                .on("mouseover", (d) => {
-                    timeTooltip.show(d)
-                })
-                .on("mouseout", function (d) {
-                    timeTooltip.hide(d)
-                });
-        }
+        timeTrendPlot.selectAll("dots")
+            .data([dataPath])
+            .enter()
+            .append('g')
+            .style("fill", "black")
+            .selectAll("myPoints")
+            .data(function (d) {
+                return d;
+            })
+            .enter()
+            .append("circle")
+            .attr('class', 'tp-circle')
+            .transition()
+            .attr("cx", function (d) {
+                return xAxis(d['date'])
+            })
+            .attr("cy", function (d) {
+                return yAxis(d['close'])
+            })
+            .attr("r", 6)
+            .attr("stroke", "white")
+            .duration(1000)
+
+        timeTrendPlot.selectAll(".tp-circle")
+            .on("mouseover", (d) => {
+                timeTooltip.show(d)
+            })
+            .on("mouseout", function (d) {
+                timeTooltip.hide(d)
+            })
 
         // plot loaded notification
         const loaded = new Event('loaded')

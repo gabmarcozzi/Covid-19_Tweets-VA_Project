@@ -91,7 +91,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         if (dataPaths[nation]) perPeriodValues.forEach(v => dataPaths[nation].push(v))
         else dataPaths[nation] = perPeriodValues
     })
-    console.log("DATAPATTESE: " + dataPaths)
     Object.entries(dataPaths).forEach(([key, value]) => {
         var currDate = new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)")
         var ending = new Date("Mon Feb 01 2021 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)")
@@ -145,11 +144,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             }
             currDate.setDate(currDate.getDate() + 1)
         }
-        //console.log("USCITO DAL LOOP")
-        //newValues.forEach(v => dataPaths[key].push(v))
     })
 
-    //console.log(dataPaths)
     Object.values(dataPaths).forEach(dp => dp.forEach(d => {
         flattenedData.push(d)
     }))
@@ -235,10 +231,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     window.dispatchEvent(loaded)
 })
 
-// d3.select("#button-sum").on("click", bella);
-// function bella() {
-//     console.log("bello zi")
-// }
 $("#button-sum").click(() => {
     sum = true
     sumButtonClicked = true

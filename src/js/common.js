@@ -214,8 +214,6 @@ const selectNation = (key) => {
         .duration(500)
         .style("stroke", "rgba(29, 161, 242, 0.2)")
         
-        //console.log("Print list: " + selectedNations)
-        
         emptyList = true;
         selectedNations.forEach(elem => {
             if(elem != "")
@@ -681,20 +679,6 @@ const stopWords = {
     'z': 1
 }
 
-var dateList = [
-    new Date("Mar 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Apr 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("May 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Jun 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Jul 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Aug 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Sep 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Oct 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Nov 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Dec 01 2020 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Jan 01 2021 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)"),
-    new Date("Feb 01 2021 00:00:00 GMT+0000 (Ora standard dell’Europa centrale)")
-]
 window.onload = () => {
     $("#loadedPage").show()
     $("#loadedPage").hide()
@@ -768,10 +752,7 @@ function updateNationPlot(start, end) {
 
     var a = {};
     Object.entries(dataPaths).forEach(([key, value]) => {
-        //console.log("AO SGHI")
-        //console.log(value['date'])
         value.forEach(v => {
-            //console.log(v['date'])
             dataInside = new Date(v['date'])
             s = new Date(start)
             //s.setDate(s.getDate() - 1)
@@ -792,7 +773,6 @@ function updateNationPlot(start, end) {
             emptyList = false;
     })
     if(!emptyList) {
-        console.log("Entro in 1")
         selectedNations.forEach(elem => {
             if(a[elem]) {
                 a[elem].forEach(v => {
@@ -801,7 +781,6 @@ function updateNationPlot(start, end) {
                 })
             }
         })
-        console.log(max)
         if(max > 0) {
             if(sum) {
                 initializeSUM();
@@ -831,7 +810,6 @@ function updateNationPlot(start, end) {
         }
     }
     else if(sum) {
-        console.log("Entro in 2")
         initializeSUM();
         y.domain([0, sumHeight])
 
@@ -839,7 +817,6 @@ function updateNationPlot(start, end) {
             initializeAVG();
     }
     else if(avg) {
-        console.log("Entro in 3")
         initializeAVG();
         y.domain([0, avgHeight])
     }
@@ -856,7 +833,6 @@ function updateNationPlot(start, end) {
         // Define the selectNation method
         const selectNationForTrend = () => selectNation(key)
 
-        //console.log(a)
         // Add the valueline path.
         if(bool) {
             nationsTrendPlot.append("path")
@@ -880,14 +856,10 @@ function updateNationPlot(start, end) {
             //.on("click", selectNationForTrend);
         }
         else {
-            var a = [];
-            //console.log("AO SGHI")
-            //console.log(value['date'])
+            var a = []
             value.forEach(v => {
-                //console.log(v['date'])
                 dataInside = new Date(v['date'])
                 s = new Date(start)
-                //s.setDate(s.getDate() - 10)
                 e = new Date(end)
 
                 if(dataInside >= s && dataInside <= e) {
@@ -1018,11 +990,8 @@ function updateNationPlot(start, end) {
             }
         }
         else {
-            var a = [];
-            //console.log("AO SGHI")
-            //console.log(value['date'])
+            var a = []
             value.forEach(v => {
-                //console.log(v['date'])
                 dataInside = new Date(v['date'])
                 s = new Date(start)
                 //s.setDate(s.getDate() - 1)
@@ -1404,7 +1373,6 @@ function initializeAVG() {
             count = count + 1;
     })
 
-    console.log(variable)
     avgPath = []
     Object.entries(variable).forEach(([month, value]) => {
         if(month != 0) {
@@ -1424,7 +1392,6 @@ function initializeAVG() {
 
         avgPath.push(insert)
     }
-    console.log(avgPath)
 
     avgHeight = 0
     avgPath.forEach(elem => {

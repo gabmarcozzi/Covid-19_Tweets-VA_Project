@@ -59,7 +59,6 @@ function updateWorldMap(start, end) {
             tweetsByCountryId[nation] = tw
         })
     }
-    console.log(tweetsByCountryId["ITA"])
 
 
     const selectNationForMap = function(d) {selectNation(d.id)}
