@@ -36,6 +36,19 @@ queue()
     .defer(d3.csv, "http://localhost:3000/covidTweetsDataset.csv")
     .await(ready)
 
+const mouseEventHandler = (event) => {
+    const mousePosX = event.clientX
+    const mousePosY = event.clientY
+    const halfRectHeight = document.getElementById('worldmap').getBoundingClientRect().height/2
+
+    if(mousePosY < halfRectHeight) {
+        tip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, 20%);`)
+    }
+    else {
+        tip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, -120%);`)
+    }
+}
+
 function updateWorldMap(start, end) {
     if(!dbclick) {
         Object.assign(tweetsByCountryId, initialTweets)
@@ -90,10 +103,13 @@ function updateWorldMap(start, end) {
         // tooltips
         .style("stroke", "black")
         .style('stroke-width', 0.3)
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
+
+            document.addEventListener('mousemove', mouseEventHandler, true)
+
             tip.show(d);
 
-            if(!selectedNations.includes(d.id)) {
+            if (!selectedNations.includes(d.id)) {
                 d3.select(this)
                     .style("opacity", 1)
                     .style("stroke", "white")
@@ -101,10 +117,13 @@ function updateWorldMap(start, end) {
             }
 
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
+
             tip.hide(d);
 
-            if(!selectedNations.includes(d.id)) {
+            document.removeEventListener('mousemove', mouseEventHandler, true)
+
+            if (!selectedNations.includes(d.id)) {
                 d3.select(this)
                     .style("opacity", 0.8)
                     .style("stroke", "black")
@@ -152,40 +171,9 @@ function ready(error, data, tweets) {
         }
 
     })
-    // tweets.forEach(t => {
-    //     data.features.forEach(f => {
-    //         f.geometry.coordinates.forEach(c => {
-    //             if(d3.polygonContains(c, t.coordinates.split(','))) {
-    //                 // if (tweetsById[f.id]) 
-    //                 //     tweetsById[f.id].push(t)
-    //                 // else 
-    //                 //     tweetsById[f.id] = [t]
-    //                 console.log("ciao")
-
-    //             }
-    //         })
-    //     })
-    // })
-
-
-    //population.forEach(function(d) { populationById[d.id] = +d.population })
-    //data.features.forEach(function(d) { d.population = tweetsByCountryId[d.id] })
 
     // Define the selectNation method
     const selectNationForMap = function (d) { selectNation(d.id) }
-
-    const mouseEventHandler = (event) => {
-        const mousePosX = event.clientX
-        const mousePosY = event.clientY
-        const halfRectHeight = document.getElementById('worldmap').getBoundingClientRect().height/2
-
-        if(mousePosY < halfRectHeight) {
-            tip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, 20%);`)
-        }
-        else {
-            tip.attr('style', `top:${mousePosY}px; left:${mousePosX}px; transform: translate(-50%, -120%);`)
-        }
-    }
 
     svg
         .attr("class", "countries")
