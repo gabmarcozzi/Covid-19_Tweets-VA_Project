@@ -164,27 +164,17 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
             selectNationForMDS(nationsIds[i])
         })
 
+    // at the start of the webapp select all the nations that are in selectedNation
+    selectedNations.forEach(nation => {
+        d3.select(`#point-${nation}`)
+            .style("stroke", "yellow")
+    })
+
     if(dispatchLoaded){
         // plot loaded notification
         const loaded = new Event('loaded')
         window.dispatchEvent(loaded)
     }
 }
-
-$("#reload-button").click(() => {
-    $("#loader").show()
-    $("#loadedPage").hide()
-
-    $("#reload-button")
-        .removeClass('mds-button')
-        .prop('disabled',true)
-
-    setTimeout(() => {
-
-
-        $("#loader").hide()
-        $("#loadedPage").show()
-    },500)
-})
 
 

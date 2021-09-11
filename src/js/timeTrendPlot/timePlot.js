@@ -93,7 +93,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 if (!idleTimeout || !dbclick) return idleTimeout = setTimeout(idledTimePlot, 350) // This allows to wait a little bit
                 resetView()
             } else {
-                loadedViews = 2
+                loadedViews = 1
 
                 let startInterval, endInterval
                 try {
@@ -218,6 +218,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
         updateWorldMap(st, en)
         updateNationPlot(st, en)
+        updateMDS(data, st, en)
 
         // Update axis and area position
         ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
