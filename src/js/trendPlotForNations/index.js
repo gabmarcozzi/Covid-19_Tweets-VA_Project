@@ -198,21 +198,21 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .data([value])
             .enter()
             .append('g')
-            .style("fill", "black")
+            .style("fill", "#1DA1F2")
             .selectAll("myPoints")
             .data(function(d){ return d; })
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x(d['date']) } )
             .attr("cy", function(d) { return y(d['close']) } )
-            .attr("r", 4)
-            .attr("stroke", "white")
+            .attr("r", 5)
+            .attr("stroke", "black")
             .on("mouseover", (d) => {
                 nationTooltipDot.show(d, idToNation[key])
             })
             .on("mouseout", function(d) {
                 nationTooltipDot.hide(d, idToNation[key])
-            });
+            })
         }
     })
 

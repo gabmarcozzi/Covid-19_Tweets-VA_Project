@@ -141,7 +141,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     area.append("path")
         .data([dataPath])
         .attr("class", "myArea")  // I add the class myArea to be able to modify it later on.
-        .attr("fill", "#69b3a2")
+        .attr("fill", "rgb(29, 161, 242)")
         .attr("fill-opacity", .3)
         .attr("stroke", "black")
         .attr("stroke-width", 1)
@@ -180,7 +180,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             return yAxis(d['close'])
         })
         .attr("r", 6)
-        .attr("stroke", "white")
+        .attr("stroke", "black")
+        .attr("fill", "var(--points-color)")
         .on("mouseover", (d) => {
             timeTooltip.show(d)
         })
@@ -235,7 +236,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             .data([dataPath])
             .enter()
             .append('g')
-            .style("fill", "black")
+            .style("fill", "var(--points-color)")
             .selectAll("myPoints")
             .data(function (d) {
                 return d;
@@ -251,7 +252,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 return yAxis(d['close'])
             })
             .attr("r", 6)
-            .attr("stroke", "white")
+            .attr("stroke", "black")
+            .attr("fill", "var(--points-color)")
             .duration(1000)
 
         timeTrendPlot.selectAll(".tp-circle")
@@ -306,7 +308,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 .style("fill", "black")
                 .selectAll("myPoints")
                 .data(function (d) {
-                    return d;
+                    return d
                 })
                 .enter()
                 .append("circle")
@@ -318,7 +320,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                     return yAxis(d['close'])
                 })
                 .attr("r", 6)
-                .attr("stroke", "white")
+                .attr("stroke", "black")
+                .attr("fill", "var(--points-color)")
                 .on("mouseover", (d) => {
                     timeTooltip.show(d)
                 })

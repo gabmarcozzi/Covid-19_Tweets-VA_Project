@@ -1,3 +1,9 @@
+:root {
+    --points-color: #1DA1F2;
+    --selection-color: #fee090;
+    --mds-stroke: rgba(0,0,0,0.5);
+}
+
 .header {
     background-color: #1DA1F2;
     margin: 0!important;
@@ -164,3 +170,4 @@
 .wc-pos {
     left:60%;
 }
+

@@ -6,18 +6,18 @@
 
 .line-sum {
     fill: none;
-    stroke: orangered;
+    stroke: #053061;
     stroke-width: 3px;
 }
 
 .line-avg {
     fill: none;
-    stroke: darkblue;
+    stroke: #b2182b;
     stroke-width: 3px;
 }
 
 .line-gab {
     fill: none;
-    stroke: yellow;
+    stroke: var(--selection-color);
     stroke-width: 3px;
 }
