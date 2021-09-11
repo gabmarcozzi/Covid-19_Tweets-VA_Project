@@ -213,6 +213,11 @@ const selectNation = (key) => {
         .transition()
         .duration(500)
         .style("stroke", "rgba(29, 161, 242, 0.2)")
+
+        d3.select(`#point-${key}`)
+            .transition()
+            .duration(500)
+            .style("stroke", "black")
         
         emptyList = true;
         selectedNations.forEach(elem => {
@@ -221,7 +226,6 @@ const selectNation = (key) => {
         })
 
         if(emptyList) {
-            console.log("entro")
             y.domain([0, d3.max(flattenedData, d => d['close'])])
             
             nationsTrendPlot.select("g")
@@ -241,6 +245,11 @@ const selectNation = (key) => {
         .transition()
         .duration(500)
         .style("stroke", "black")
+
+        d3.select(`#point-${key}`)
+            .transition()
+            .duration(500)
+            .style("stroke", "yellow")
     }
     updateButtons()
     updateNationPlot(x.domain()[0], x.domain()[1])
@@ -1235,7 +1244,7 @@ function initializeSUM() {
 //                 }
 //             })
 //         }
-        
+
 
 //         var variable = {}
 //         a.forEach(d => {
@@ -1268,7 +1277,7 @@ function initializeSUM() {
 //             }
 
 //             b.push(insert)
-//         } 
+//         }
 
 //         sumHeight = 0;
 //         b.forEach(elem => {

@@ -4,12 +4,9 @@ let maxY
 const mdsTooltip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
-    .html((d, data) => {
+    .html((d, nation) => {
         return `
-            <strong>Retweet count: </strong><span class='details'>${data[0]}` +
-            "<br></span>" + `<strong>User friends count: </strong><span class='details'>${data[1]}` +
-            "<br></span>" + `<strong>Number of words: </strong><span class='details'>${data[2]}` +
-            "<br></span>" + `<strong>Unix timestamp: </strong><span class='details'>${data[3]}` +
+            <strong>Nation: </strong><span class='details'>${idToNation[nation]}` +
             "<br></span>" + `<strong>X: </strong><span class='details'>${d[0]}` +
             "<br></span>" + `<strong>Y: </strong><span class='details'> ${d[1]}`
     })
@@ -55,12 +52,6 @@ const clipMDS = mdsSvg.append("defs").append("svg:clipPath")
     .attr("height", mdsHeight )
     .attr("x", 0)
     .attr("y", 0)
-
-// Downsample dataset in order to perform MDS in a reprersentative sample of the dataset
-const downsampleData = (data) => {
-    const step = Math.floor(data.length / 5000)
-    return data.filter((d, i) => i % step === 0)
-}
 
 // A function that update the chart for given boundaries
 const zoomChart = (resetZoom = false) => {
@@ -110,6 +101,9 @@ pointsContainer
 let idleTimeoutMDS
 function idled() { idleTimeoutMDS = null; }
 
+// Define the selectNation method
+const selectNationForMDS = (key) => selectNation(key)
+
 const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
     if(start && end) {
         // Reset chart to default zoom
@@ -117,14 +111,22 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))
     }
 
-    const tweetsMatrix = data.map((d, i) => {
+    const nationsDictionary = {}
+    nationsIds.forEach(key => nationsDictionary[key] = [0, 0, 0, 0])
+
+    data.forEach((d, i) => {
         // For each entry create a vector containing the number of retweets, the user's followers number and the number of words of each tweet
-        return [parseInt(d.retweet_count), parseInt(d.user_friends_count), tokenizedTweets[i].length, moment(d.created_at).valueOf()]
+        nationsDictionary[d.country_id] = [
+            nationsDictionary[d.country_id][0] + parseInt(d.retweet_count),
+            nationsDictionary[d.country_id][1] + (parseInt(d.user_friends_count) || 0),
+            nationsDictionary[d.country_id][2] + 1,
+            nationsDictionary[d.country_id][3] + tokenizedTweets[i].length
+        ]
     })
 
-    const cutMatrix = downsampleData(tweetsMatrix)
+    const nationsMatrix = Object.values(nationsDictionary)
 
-    const druidMDS = new druid.MDS(cutMatrix)
+    const druidMDS = new druid.MDS(nationsMatrix)
 
     const druidReducedMatrix = druidMDS.transform()
 
@@ -145,6 +147,7 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         .data(druidReducedMatrix)
         .enter()
         .append("circle")
+        .attr("id", (d, i) => `point-${nationsIds[i]}`)
         .attr('class', 'mds-circle')
         .attr("cx", d => mdsX(d[0]))
         .attr("cy", d => mdsY(d[1]))
@@ -152,10 +155,13 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         .attr("stroke", "black")
         .style("fill", "#1DA1F2")
         .on("mouseover", (d, i) => {
-            mdsTooltip.show(d, cutMatrix[i])
+            mdsTooltip.show(d, nationsIds[i])
         })
         .on("mouseout", (d, i) => {
-            mdsTooltip.hide(d, cutMatrix[i])
+            mdsTooltip.hide(d, nationsIds[i])
+        })
+        .on("click", (d, i) => {
+            selectNationForMDS(nationsIds[i])
         })
 
     if(dispatchLoaded){
@@ -174,7 +180,7 @@ $("#reload-button").click(() => {
         .prop('disabled',true)
 
     setTimeout(() => {
-        updateMDS(dataStorage, startInterval, endInterval, false)
+
 
         $("#loader").hide()
         $("#loadedPage").show()

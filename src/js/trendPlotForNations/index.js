@@ -190,16 +190,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
 
-
-    // at the start of the webapp select all the nations that are in selectedNation
-    selectedNations.forEach(nation => {
-        d3.select(`#trend-${nation}`)
-            .style("stroke", "yellow");
-        
-        d3.select(`#trend-${nation}`).raise()
-            
-    })
-
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
 

@@ -225,13 +225,6 @@ function ready(error, data, tweets) {
         .attr("class", "names")
         .attr("d", path)
 
-    // at the start of the webapp select all the nations contained in selectedNations
-    selectedNations.forEach(function (nation) {
-        d3.select(`#map-${nation}`)
-            .style("stroke", "yellow")
-            .style("stroke-width", 3)
-    })
-
     // plot loaded notification
     const loaded = new Event('loaded')
     window.dispatchEvent(loaded)
