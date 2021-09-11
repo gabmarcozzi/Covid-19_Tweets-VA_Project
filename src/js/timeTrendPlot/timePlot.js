@@ -100,6 +100,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                     [startInterval, endInterval] = dateFromExtent(extent)
                 }
                 catch(e) {
+                    alert('Interval is less than one month, extend the brushing area')
                     console.error('Interval is less than one month, extend the brushing area')
                     return
                 }
