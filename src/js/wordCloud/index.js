@@ -69,7 +69,7 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
     // List of words
     const myWords = {}
 
-    topTenWordFreqs.forEach((wf, i) => myWords[wf[0]] = `${(i + 1) * 7}`)
+    topTenWordFreqs.forEach((wf, i) => myWords[wf[0]] = `${(i + 1) * 6}`)
 
     let colorCounter = 0
     const colors = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
