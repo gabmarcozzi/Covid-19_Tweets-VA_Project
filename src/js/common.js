@@ -250,7 +250,6 @@ const selectNation = (key) => {
             .transition()
             .duration(500)
             .style("fill", `${selectionColor}`)
-            .raise()
     }
     updateButtons()
     updateNationPlot(x.domain()[0], x.domain()[1], false)
@@ -954,7 +953,7 @@ function updateNationPlot(start, end, dispatchEvent = true) {
         d3.select(`#trend-${nation}`)
             .style("stroke", `${selectionColors[i%selectionColors.length]}`);
 
-        d3.select(`#trend-${nation}`).raise()
+        d3.select(`#trend-${nation}`)
     })
 
     Object.entries(dataPaths).forEach(([key, value]) => {

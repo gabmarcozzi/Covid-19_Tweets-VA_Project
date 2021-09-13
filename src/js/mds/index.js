@@ -172,7 +172,6 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         const selectionColor = selectionColors[i%selectionColors.length]
         d3.select(`#point-${nation}`)
             .style("fill", `${selectionColor}`)
-            .raise()
     })
 
     if(dispatchLoaded){
