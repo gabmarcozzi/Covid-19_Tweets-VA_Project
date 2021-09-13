@@ -85,15 +85,9 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
             return item
         }))
         .padding(5)        //space between words
-        .rotate((_, i) => {
-            console.log(i, orientations.length)
-            console.log(i%orientations.length)
-            return orientations[i % orientations.length]
-        })
+        .rotate((_, i) => orientations[i % orientations.length])
         .fontSize(d => d.size)      // font size of words
         .on("end", (words) => {
-
-
 
             var update = wordCloudSvg
                 .append("g")
