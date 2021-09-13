@@ -73,6 +73,7 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
 
     let colorCounter = 0
     const colors = ['#543005', '#8c510a', '#bf812d', '#dfc27d', '#f6e8c3', '#c7eae5', '#80cdc1', '#35978f', '#01665e', '#003c30']
+    const orientations = [90,0]
 
     // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
     // Wordcloud features that are different from one word to the other must be here
@@ -84,15 +85,24 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
             return item
         }))
         .padding(5)        //space between words
-        .rotate(() => ~~(Math.random() * 2) * 90)
+        .rotate((_, i) => {
+            console.log(i, orientations.length)
+            console.log(i%orientations.length)
+            return orientations[i % orientations.length]
+        })
         .fontSize(d => d.size)      // font size of words
         .on("end", (words) => {
 
-            wordCloudSvg
+
+
+            var update = wordCloudSvg
                 .append("g")
                 .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
                 .selectAll("text")
                 .data(words)
+
+
+            var enter = update
                 .enter().append("text")
                 .style("font-size", d => {
                     return d.size
@@ -100,8 +110,13 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
                 .style("fill", d => d.color)
                 .attr("text-anchor", "middle")
                 .style("font-family", "Impact")
-                .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
                 .text(d => d.text)
+
+            update
+                .merge(enter)
+                .transition()
+                .duration(1000)
+                .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
         })
 
     // Draw the wordcloud

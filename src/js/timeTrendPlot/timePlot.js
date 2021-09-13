@@ -214,6 +214,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         updateWorldMap(st, en)
         updateNationPlot(st, en)
         updateMDS(data, st, en)
+        updateWordCloud(data, st, en)
 
         // Update axis and area position
         ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
