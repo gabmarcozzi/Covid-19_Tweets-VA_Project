@@ -154,9 +154,9 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         .attr("cx", d => mdsX(d[0]))
         .attr("cy", d => mdsY(d[1]))
         .attr("r", 7)
+        .style("fill", "var(--mds-color)")
         .attr("stroke", "var(--mds-stroke)")
         .attr("stroke-width", "1.5")
-        .style("fill", "#1DA1F2")
         .on("mouseover", (d, i) => {
             mdsTooltip.show(d, nationsIds[i])
         })
@@ -168,9 +168,11 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         })
 
     // at the start of the webapp select all the nations that are in selectedNation
-    selectedNations.forEach(nation => {
+    selectedNations.forEach((nation, i) => {
+        const selectionColor = selectionColors[i%selectionColors.length]
         d3.select(`#point-${nation}`)
-            .style("stroke", "var(--selection-color)")
+            .style("fill", `${selectionColor}`)
+            .raise()
     })
 
     if(dispatchLoaded){

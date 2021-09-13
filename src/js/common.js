@@ -216,7 +216,7 @@ const selectNation = (key) => {
         d3.select(`#point-${key}`)
             .transition()
             .duration(500)
-            .style("stroke", "var(--mds-stroke)")
+            .style("fill", "var(--mds-color)")
 
         emptyList = true;
         selectedNations.forEach(elem => {
@@ -233,21 +233,24 @@ const selectNation = (key) => {
     } else {
         selectedNations.push(key)
 
+        const selectionColor = selectionColors[(selectedNations.length%selectionColors.length)-1]
+
         d3.select(`#map-${key}`)
             .transition()
             .duration(500)
-            .style("stroke", "var(--selection-color)")
+            .style("stroke", `${selectionColor}`)
             .style("stroke-width", 3)
 
         d3.select(`#trend-${key}`)
             .transition()
             .duration(500)
-            .style("stroke", "var(--selection-color)")
+            .style("stroke", `${selectionColor}`)
 
         d3.select(`#point-${key}`)
             .transition()
             .duration(500)
-            .style("stroke", "var(--selection-color)")
+            .style("fill", `${selectionColor}`)
+            .raise()
     }
     updateButtons()
     updateNationPlot(x.domain()[0], x.domain()[1], false)
@@ -728,6 +731,8 @@ var color = d3.scaleThreshold()
     .domain([10, 50, 100, 300, 500, 1000, 2000, 5000, 10000, 20000])
     .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]);
 
+const selectionColors = ['#b15928', '#ffff99', '#6a3d9a', '#cab2d6', '#ff7f00', '#fdbf6f', '#e31a1c', '#fb9a99', '#33a02c', '#b2df8a']
+
 var nationsTrendPlot;
 var nationsTrendMargin;
 var nationsTrendWidth;
@@ -945,9 +950,9 @@ function updateNationPlot(start, end, dispatchEvent = true) {
 
 
     // at the start of the webapp select all the nations that are in selectedNation
-    selectedNations.forEach(nation => {
+    selectedNations.forEach((nation, i) => {
         d3.select(`#trend-${nation}`)
-            .style("stroke", "var(--selection-color)");
+            .style("stroke", `${selectionColors[i%selectionColors.length]}`);
 
         d3.select(`#trend-${nation}`).raise()
     })

@@ -139,9 +139,10 @@ function updateWorldMap(start, end) {
         .attr("class", "names")
         .attr("d", path)
 
-    selectedNations.forEach(function(nation) {
+    selectedNations.forEach(function(nation, i) {
+        const selectionColor = selectionColors[i%selectionColors.length]
         d3.select(`#map-${nation}`)
-            .style("stroke", "var(--selection-color)")
+            .style("stroke", `${selectionColor}`)
             .style("stroke-width", 3)
     })
 

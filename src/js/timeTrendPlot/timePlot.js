@@ -110,14 +110,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 $("#loadedPage").css("z-index", "-1");
                 clickDisabled = true
 
-                $("#reload-button")
-                    .addClass('mds-button')
-                    .prop('disabled', false)
-
-                $("#reload-button-wc")
-                    .addClass('mds-button')
-                    .prop('disabled', false)
-
                 setTimeout(() => {
                     updateChart(startInterval, endInterval)
                 }, 500)
@@ -143,7 +135,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     area.append("path")
         .data([dataPath])
         .attr("class", "myArea")  // I add the class myArea to be able to modify it later on.
-        .attr("fill", "rgb(29, 161, 242)")
+        .attr("fill", "#d9d9d9")
         .attr("fill-opacity", .3)
         .attr("stroke", "black")
         .attr("stroke-width", 1)
@@ -277,14 +269,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         $("#loader").css("z-index", "1");
         $("#loadedPage").css("z-index", "-1");
         clickDisabled = true
-
-        $("#reload-button")
-            .removeClass('mds-button')
-            .prop('disabled', true)
-
-        $("#reload-button-wc")
-            .removeClass('mds-button')
-            .prop('disabled', true)
 
         setTimeout(() => {
             startInterval = null

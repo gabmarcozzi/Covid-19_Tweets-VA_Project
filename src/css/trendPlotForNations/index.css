@@ -6,13 +6,13 @@
 
 .line-sum {
     fill: none;
-    stroke: #053061;
+    stroke: #a6cee3;
     stroke-width: 3px;
 }
 
 .line-avg {
     fill: none;
-    stroke: #b2182b;
+    stroke: #e7298a;
     stroke-width: 3px;
 }
 
