@@ -88,6 +88,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
         .extent([[0, 0], [timeTrendWidth, timeTrendHeight]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", () => {
+            if(clickDisabled) return
             const extent = d3.event.selection
             if (!extent) {
                 if (!idleTimeout || !dbclick) return idleTimeout = setTimeout(idledTimePlot, 350) // This allows to wait a little bit
@@ -105,8 +106,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                     return
                 }
 
-                $("#loadedPage").hide()
-                $("#loader").show()
+                $("#loader").css("z-index", "1");
+                $("#loadedPage").css("z-index", "-1");
+                clickDisabled = true
 
                 $("#reload-button")
                     .addClass('mds-button')
@@ -272,8 +274,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     const resetView = () => {
         dbclick = false
         loadedViews = 1
-        $("#loadedPage").hide()
-        $("#loader").show()
+        $("#loader").css("z-index", "1");
+        $("#loadedPage").css("z-index", "-1");
+        clickDisabled = true
 
         $("#reload-button")
             .removeClass('mds-button')

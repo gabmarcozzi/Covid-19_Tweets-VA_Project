@@ -56,6 +56,8 @@ const clipMDS = mdsSvg.append("defs").append("svg:clipPath")
 // A function that update the chart for given boundaries
 const zoomChart = (resetZoom = false) => {
 
+    if(clickDisabled) return
+
     let extent = null
 
     if(!resetZoom) {

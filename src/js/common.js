@@ -686,11 +686,6 @@ const stopWords = {
     'z': 1
 }
 
-window.onload = () => {
-    $("#loadedPage").show()
-    $("#loadedPage").hide()
-    $("#loader").show()
-}
 
 const timeGrain = 'month'
 // parse the date / time
@@ -1109,6 +1104,7 @@ let tokenizedTweets = []
 let startInterval
 let endInterval
 let dataStorage
+let clickDisabled = true
 
 // loading view
 window.addEventListener('loaded', event => {
@@ -1116,8 +1112,9 @@ window.addEventListener('loaded', event => {
     console.log(loadedViews)
     if (loadedViews === 5) {
         console.log('loaded')
-        $("#loader").hide()
-        $("#loadedPage").show()
+        $("#loader").css("z-index", "-1");
+        $("#loadedPage").css("z-index", "1");
+        clickDisabled = false
     }
 }, false)
 
@@ -1227,110 +1224,6 @@ function initializeSUM() {
 
     console.log("sumHeight in initializeSUM(): " + sumHeight)
 }
-
-// function computeSUM() {
-//     if(!sum) {
-//         var startX = x.domain()[0]
-//         var endX = x.domain()[1]
-
-//         var a = []
-//         if(nationSUM.length > 0) {
-//             Object.entries(dataPaths).forEach(([key, value]) => {
-//                 if(nationSUM.includes(key)) {
-//                     //nationSUM.push(key)
-//                     value.forEach(v => {
-//                         dataInside = new Date(v['date'])
-//                         if(dataInside >= startX && dataInside <= endX) {
-//                             a.push(v);
-//                         }
-//                     })
-//                 }
-//             })
-//         }
-//         else {
-//             Object.entries(dataPaths).forEach(([key, value]) => {
-//                 if(selectedNations.includes(key)) {
-//                     nationSUM.push(key)
-//                     value.forEach(v => {
-//                         dataInside = new Date(v['date'])
-//                         if(dataInside >= startX && dataInside <= endX) {
-//                             a.push(v);
-//                         }
-//                     })
-//                 }
-//             })
-//         }
-
-
-//         var variable = {}
-//         a.forEach(d => {
-//             if(variable[d['date'].getMonth()]) {
-//                 variable[d['date'].getMonth()] += d['close']
-//             }
-//             else {
-//                 variable[d['date'].getMonth()] = d['close']
-//             }
-//         })
-
-//         b = [];
-
-//         Object.entries(variable).forEach(([month, value]) => {
-//             if(month != 0) {
-//                 insert = {
-//                     date: new Date(2020, month, 1),
-//                     close: value
-//                 }
-//                 b.push(insert)
-//             }
-//             // if(insert['date'].getMonth() == 0)
-//             //     insert['date'].setFullYear(2021)
-//         })
-
-//         if(variable[0]) {
-//             insert = {
-//                 date: new Date(2021, 0, 1),
-//                 close: variable[0]
-//             }
-
-//             b.push(insert)
-//         }
-
-//         sumHeight = 0;
-//         b.forEach(elem => {
-//             if(elem['close'] > sumHeight)
-//             sumHeight = elem['close']
-//         })
-
-//         sum = true
-//         callingFromComputeSUM = true
-//         updateNationPlot(startX, endX)
-//         callingFromComputeSUM = false
-
-//         console.log(b)
-//         nationsTrendPlot.append("path")
-//             .data([b])
-//             .attr("class", "line-sum")
-//             .attr("id", `trend-SUM`)
-//             .attr("d", valueline)
-//             // .on('mouseover', () => {
-
-//             //     document.addEventListener('mousemove', trendMouseEventHandler, true)
-
-//             //     nationTooltip.show("SUM")
-//             // })
-//             // .on('mouseout', () => {
-//             //     document.removeEventListener('mousemove', trendMouseEventHandler, true)
-//             //     nationTooltip.hide("SUM")
-//             // })
-//             .on("click", deleteSUM)
-
-//         nationsTrendPlot.append("g")
-//             .call(d3.axisLeft(y))
-//     }
-//     else {
-//         deleteSUM()
-//     }
-// }
 
 function deleteSUM() {
     sum = false;

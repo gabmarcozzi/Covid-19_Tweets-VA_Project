@@ -68,7 +68,7 @@
   
 
 #loader {
-    background-color: #1DA1F2;
+    background-color: transparent;
     width: 100%;
     height: 100%;
     transition: all 2s;
@@ -83,7 +83,7 @@
     margin:auto;
 }
 
-.h-10 {
+.h-6 {
     height: 6%
 }
 

@@ -114,8 +114,9 @@ const wordCloudMargin = { top: 10, right: 50, bottom: 50, left: 10 },
   }
 
 $("#reload-button-wc").click(() => {
-  $("#loader").show()
-  $("#loadedPage").hide()
+  $("#loader").css("z-index", "1");
+  $("#loadedPage").css("z-index", "-1");
+  clickDisabled = true
 
   $("#reload-button-wc")
       .removeClass('mds-button')
@@ -124,7 +125,8 @@ $("#reload-button-wc").click(() => {
   setTimeout(() => {
     updateWordCloud(dataStorage, startInterval, endInterval, false)
 
-    $("#loader").hide()
-    $("#loadedPage").show()
+    $("#loader").css("z-index", "-1");
+    $("#loadedPage").css("z-index", "1");
+    clickDisabled = false
   },500)
 })
