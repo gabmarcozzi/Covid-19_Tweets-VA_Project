@@ -108,6 +108,14 @@
     height: 95%
 }
 
+.h-45 {
+    height: 45%
+}
+
+.h-55 {
+    height: 55%
+}
+
 .svg-container {
     display: inline-block;
     position: relative;

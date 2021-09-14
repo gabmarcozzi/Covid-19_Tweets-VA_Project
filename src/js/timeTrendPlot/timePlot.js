@@ -25,7 +25,7 @@ const timeTrendPlot = d3.select("#timeTrendPlot")
     .attr("width", "100%")
     .attr("height", "100%")
     //.attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 1110 278")
+    .attr("viewBox", "-40 0 750 300")
     // Class to make it responsive.
     //.classed("svg-content-responsive", true)
     .append("g")

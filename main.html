@@ -54,26 +54,33 @@
                     </div>
                     <div id="legenda-svg" class="col-2" style = "/*position:absolute; left:80%; top:30%;*/padding-left: 0; padding-right: 0; /*padding-top: 50;*/"></div>
                 </div>
-                
-                <div id="timeTrendPlot" class="h-30" style="margin-left: 30px;">
-                    <script src="./src/js/timeTrendPlot/timePlot.js"></script>
+                <div class="row m-0 h-30" style="background-color: #657786">
+                    <div id="timeTrendPlot" class="col-8 p-0 h-100" style="margin-left: 0px;">
+                        <script src="./src/js/timeTrendPlot/timePlot.js"></script>
+                    </div>
+                    <div id="wordcloud" class="col-4 p-0 h-100">
+                        <script src="./src/js/wordCloud/index.js"></script>
+                    </div>
                 </div>
             </div>
 
             <div class="col-5 p-0">
-                <div id="nationsTrendPlot" class="h-60">
+                <div id="nationsTrendPlot" class="h-45">
                     <button class="button3 sum-pos mds-pos mds-button" id="button-sum">Compute SUM</button>
                     <button class="button3 sum-pos avg-pos mds-button" id="button-avg">Compute AVG</button>
                     <script src="./src/js/trendPlotForNations/index.js"></script>
                 </div>
-                <div class="row m-0 h-40">
+                <div id="mds" class="h-55">
+                    <script src="./src/js/mds/index.js"></script>
+                </div>
+                <!-- <div class="row m-0 h-60">
                     <div id="mds" class="col-6 p-0 h-100">
                         <script src="./src/js/mds/index.js"></script>
                     </div>
                     <div id="wordcloud" class="col-6 p-0 h-100">
                         <script src="./src/js/wordCloud/index.js"></script>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
