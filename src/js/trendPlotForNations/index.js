@@ -216,6 +216,12 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         }
     })
 
+    selectedNations.forEach((nation, i) => {
+        const selectionColor = selectionColors[i%selectionColors.length]
+        d3.select(`#trend-${nation}`)
+            .style("fill", `${selectionColor}`)
+    })
+
     // plot loaded notification
     const loaded = new Event('loaded')
     window.dispatchEvent(loaded)
