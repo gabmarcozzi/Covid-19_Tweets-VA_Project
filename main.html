@@ -48,9 +48,13 @@
 
         <div class="row m-0 h-95" style="background-color: #657786">
             <div class="col-7 p-0">
-                <div id="worldmap" class="h-70">
-                    <script src="./src/js/worldmap.js"></script>
+                <div class="row m-0 h-70" style="background-color: #657786">
+                    <div id="worldmap" class="col-10" style="padding-right: 0">
+                        <script src="./src/js/worldmap.js"></script>
+                    </div>
+                    <div id="legenda-svg" class="col-2" style = "/*position:absolute; left:80%; top:30%;*/padding-left: 0; padding-right: 0; /*padding-top: 50;*/"></div>
                 </div>
+                
                 <div id="timeTrendPlot" class="h-30" style="margin-left: 30px;">
                     <script src="./src/js/timeTrendPlot/timePlot.js"></script>
                 </div>

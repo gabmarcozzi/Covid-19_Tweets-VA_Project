@@ -1333,3 +1333,43 @@ function deleteAVG() {
 function toFixedIfNecessary(value, dp) {
     return +parseFloat(value).toFixed(dp);
 }
+
+var colors = ["rgb(101, 119, 134)", "rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]//[new Color(247, 251, 255), new Color(247, 251, 255), new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255)]
+
+function insertLegend() {
+    10, 50, 100, 300, 500, 1000, 2000, 5000, 10000, 20000
+    var legendText = ["# Tweets", "0-10", "11-50", "51-100", "101-300", "301-500", "501-1000", "1001-2000", "2001-5000", "5001-10000", "10001+"];
+    var legendsvg = d3.select("#legenda-svg")
+    var legend = legendsvg.append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("class", "legend")
+        .selectAll("g")
+        .data(legendText)
+        .enter()
+        .append("g")
+        .attr("transform", function (d, i) {
+            return "translate(0," + i * 20 + ")";
+        });
+
+    legend.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", function (d, i) {
+            var color = colors[i];
+            return color;
+        });
+
+    legend.append("text")
+        .data(legendText)
+        .attr("x", 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text(function (d) {
+            return d;
+        })
+        .style("font-weight", function (d, i) {
+            if (i == 0)
+                return "bold"
+        });
+}

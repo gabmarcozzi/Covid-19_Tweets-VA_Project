@@ -36,7 +36,7 @@ timeTrendPlot.call(timeTooltip)
 
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
-
+    insertLegend()
     const tweets = []
     data.forEach(d => {
         tweets.push(d)
@@ -70,10 +70,20 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     var ciao = timeTrendPlot.append("g")
         .attr("transform", "translate(0," + timeTrendHeight + ")")
         .call(d3.axisBottom(xAxis))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(500, 30)")
+        .text("Hello World!!!");
 
     // Add the Y Axis
     timeTrendPlot.append("g")
         .call(d3.axisLeft(yAxis))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(-45, 80) rotate(-90)")
+        .text("Hello Worlryerd!!!");
 
     // Add a clipPath: everything out of this area won't be drawn.
     var clip = timeTrendPlot.append("defs").append("svg:clipPath")
