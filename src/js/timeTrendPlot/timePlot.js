@@ -209,6 +209,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         en = new Date(e.getFullYear(), e.getMonth(), 1)
         en.setHours(00, 00, 00)
 
+        console.log(st)
+        console.log(en)
+
         if(Math.abs(st.getMonth() - en.getMonth()) < 1) throw Error()
 
         return [st, en]
@@ -216,10 +219,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
     // A function that update the chart for given boundaries
     function updateChart(st, en) {
+        //xAxis.domain([st, en])
 
-        xAxis.domain([st, en])
-
-        area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        //area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
 
         updateWorldMap(st, en)
         updateNationPlot(st, en)
@@ -227,47 +229,47 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         updateWordCloud(data, st, en)
 
         // Update axis and area position
-        ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
-        area
-            .select('.myArea')
-            .transition()
-            .duration(1000)
-            .attr("d", areaGenerator)
+        // ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
+        // area
+        //     .select('.myArea')
+        //     .transition()
+        //     .duration(1000)
+        //     .attr("d", areaGenerator)
 
-        timeTrendPlot.selectAll(".tp-circle")
-            .remove()
+        // timeTrendPlot.selectAll(".tp-circle")
+        //     .remove()
 
-        timeTrendPlot.selectAll("dots")
-            .data([dataPath])
-            .enter()
-            .append('g')
-            .style("fill", "var(--points-color)")
-            .selectAll("myPoints")
-            .data(function (d) {
-                return d;
-            })
-            .enter()
-            .append("circle")
-            .attr('class', 'tp-circle')
-            .transition()
-            .attr("cx", function (d) {
-                return xAxis(d['date'])
-            })
-            .attr("cy", function (d) {
-                return yAxis(d['close'])
-            })
-            .attr("r", 6)
-            .attr("stroke", "black")
-            .attr("fill", "var(--points-color)")
-            .duration(1000)
+        // timeTrendPlot.selectAll("dots")
+        //     .data([dataPath])
+        //     .enter()
+        //     .append('g')
+        //     .style("fill", "var(--points-color)")
+        //     .selectAll("myPoints")
+        //     .data(function (d) {
+        //         return d;
+        //     })
+        //     .enter()
+        //     .append("circle")
+        //     .attr('class', 'tp-circle')
+        //     .transition()
+        //     .attr("cx", function (d) {
+        //         return xAxis(d['date'])
+        //     })
+        //     .attr("cy", function (d) {
+        //         return yAxis(d['close'])
+        //     })
+        //     .attr("r", 6)
+        //     .attr("stroke", "black")
+        //     .attr("fill", "var(--points-color)")
+        //     .duration(1000)
 
-        timeTrendPlot.selectAll(".tp-circle")
-            .on("mouseover", (d) => {
-                timeTooltip.show(d)
-            })
-            .on("mouseout", function (d) {
-                timeTooltip.hide(d)
-            })
+        // timeTrendPlot.selectAll(".tp-circle")
+        //     .on("mouseover", (d) => {
+        //         timeTooltip.show(d)
+        //     })
+        //     .on("mouseout", function (d) {
+        //         timeTooltip.hide(d)
+        //     })
 
         // plot loaded notification
         const loaded = new Event('loaded')
