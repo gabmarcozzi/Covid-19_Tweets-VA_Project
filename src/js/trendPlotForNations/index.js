@@ -44,8 +44,8 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("div")
     .append("svg")
     .attr("width", "100%")
-    .attr("height", "90%")
-    .attr("viewBox", "0 0 800 552")
+    .attr("height", "100%")
+    .attr("viewBox", "15 15 660 460")
     .append("g")
     .attr("transform",
         "translate(" + nationsTrendMargin.left + "," + nationsTrendMargin.top + ")")
@@ -185,10 +185,29 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     nationsTrendPlot.append("g")
         .attr("transform", "translate(0," + nationsTrendHeight + ")")
         .call(d3.axisBottom(x))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(285, 33)")
+        .text("Date");
 
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(-48, 140) rotate(-90)")
+        .text("# Tweets");
+
+    selectedNations.forEach((nation, i) => {
+        const selectionColor = selectionColors[i%selectionColors.length]
+        d3.select(`#trend-${nation}`)
+            .style("stroke", `${selectionColor}`)
+        d3.select(`#trend-${nation}`).raise()
+    })
+
+    insertLegendNat()
 
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
@@ -214,12 +233,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 nationTooltipDot.hide(d, idToNation[key])
             })
         }
-    })
-
-    selectedNations.forEach((nation, i) => {
-        const selectionColor = selectionColors[i%selectionColors.length]
-        d3.select(`#trend-${nation}`)
-            .style("stroke", `${selectionColor}`)
     })
 
     // plot loaded notification

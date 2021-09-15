@@ -22,3 +22,10 @@
 .details {
     color: white;
 }
+
+.legend {
+    position: absolute;
+    top: 10%;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }

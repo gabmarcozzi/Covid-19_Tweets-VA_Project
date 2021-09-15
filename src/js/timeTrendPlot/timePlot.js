@@ -25,7 +25,7 @@ const timeTrendPlot = d3.select("#timeTrendPlot")
     .attr("width", "100%")
     .attr("height", "100%")
     //.attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 1110 278")
+    .attr("viewBox", "-40 0 750 300")
     // Class to make it responsive.
     //.classed("svg-content-responsive", true)
     .append("g")
@@ -36,7 +36,7 @@ timeTrendPlot.call(timeTooltip)
 
 d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     if (error) throw error
-
+    insertLegend()
     const tweets = []
     data.forEach(d => {
         tweets.push(d)
@@ -70,10 +70,20 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     var ciao = timeTrendPlot.append("g")
         .attr("transform", "translate(0," + timeTrendHeight + ")")
         .call(d3.axisBottom(xAxis))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(325, 35)")
+        .text("Date");
 
     // Add the Y Axis
     timeTrendPlot.append("g")
         .call(d3.axisLeft(yAxis))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(-48, 80) rotate(-90)")
+        .text("# Tweets");
 
     // Add a clipPath: everything out of this area won't be drawn.
     var clip = timeTrendPlot.append("defs").append("svg:clipPath")
@@ -199,6 +209,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         en = new Date(e.getFullYear(), e.getMonth(), 1)
         en.setHours(00, 00, 00)
 
+        console.log(st)
+        console.log(en)
+
         if(Math.abs(st.getMonth() - en.getMonth()) < 1) throw Error()
 
         return [st, en]
@@ -206,10 +219,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
     // A function that update the chart for given boundaries
     function updateChart(st, en) {
+        //xAxis.domain([st, en])
 
-        xAxis.domain([st, en])
-
-        area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        //area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
 
         updateWorldMap(st, en)
         updateNationPlot(st, en)
@@ -217,47 +229,47 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         updateWordCloud(data, st, en)
 
         // Update axis and area position
-        ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
-        area
-            .select('.myArea')
-            .transition()
-            .duration(1000)
-            .attr("d", areaGenerator)
+        // ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
+        // area
+        //     .select('.myArea')
+        //     .transition()
+        //     .duration(1000)
+        //     .attr("d", areaGenerator)
 
-        timeTrendPlot.selectAll(".tp-circle")
-            .remove()
+        // timeTrendPlot.selectAll(".tp-circle")
+        //     .remove()
 
-        timeTrendPlot.selectAll("dots")
-            .data([dataPath])
-            .enter()
-            .append('g')
-            .style("fill", "var(--points-color)")
-            .selectAll("myPoints")
-            .data(function (d) {
-                return d;
-            })
-            .enter()
-            .append("circle")
-            .attr('class', 'tp-circle')
-            .transition()
-            .attr("cx", function (d) {
-                return xAxis(d['date'])
-            })
-            .attr("cy", function (d) {
-                return yAxis(d['close'])
-            })
-            .attr("r", 6)
-            .attr("stroke", "black")
-            .attr("fill", "var(--points-color)")
-            .duration(1000)
+        // timeTrendPlot.selectAll("dots")
+        //     .data([dataPath])
+        //     .enter()
+        //     .append('g')
+        //     .style("fill", "var(--points-color)")
+        //     .selectAll("myPoints")
+        //     .data(function (d) {
+        //         return d;
+        //     })
+        //     .enter()
+        //     .append("circle")
+        //     .attr('class', 'tp-circle')
+        //     .transition()
+        //     .attr("cx", function (d) {
+        //         return xAxis(d['date'])
+        //     })
+        //     .attr("cy", function (d) {
+        //         return yAxis(d['close'])
+        //     })
+        //     .attr("r", 6)
+        //     .attr("stroke", "black")
+        //     .attr("fill", "var(--points-color)")
+        //     .duration(1000)
 
-        timeTrendPlot.selectAll(".tp-circle")
-            .on("mouseover", (d) => {
-                timeTooltip.show(d)
-            })
-            .on("mouseout", function (d) {
-                timeTooltip.hide(d)
-            })
+        // timeTrendPlot.selectAll(".tp-circle")
+        //     .on("mouseover", (d) => {
+        //         timeTooltip.show(d)
+        //     })
+        //     .on("mouseout", function (d) {
+        //         timeTooltip.hide(d)
+        //     })
 
         // plot loaded notification
         const loaded = new Event('loaded')
@@ -279,7 +291,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             updateWordCloud(data)
             updateMDS(data)
             xAxis.domain(d3.extent(flattenedData, d => d['date']))
-            ciao.transition().call(d3.axisBottom(xAxis))
+            //ciao.transition().call(d3.axisBottom(xAxis))
 
             area
                 .select('.myArea')

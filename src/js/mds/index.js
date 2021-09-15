@@ -21,7 +21,7 @@ const mdsSvg = d3.select("#mds")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
-    .attr("viewBox", "0 0 460 428")
+    .attr("viewBox", "0 -50 800 600")
     .append("g")
     .attr("transform",
         "translate(" + mdsMargin.left + "," + mdsMargin.top + ")")

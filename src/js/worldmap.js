@@ -19,7 +19,7 @@ svg = d3.select("#worldmap")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
-    .attr("viewBox", "0 0 1143 812")
+    .attr("viewBox", "0 0 900 880")
     .append('g')
     .attr('class', 'map')
 

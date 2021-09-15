@@ -745,7 +745,7 @@ var valueline = d3.line()
     .y(d => y(d['close']))
 
 const flattenedData = [];
-
+var colori = ['#b15928', '#ffff99', '#6a3d9a']
 function updateNationPlot(start, end, dispatchEvent = true) {
     var bool = false;
     if (new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
@@ -943,18 +943,33 @@ function updateNationPlot(start, end, dispatchEvent = true) {
     nationsTrendPlot.append("g")
         .attr("transform", "translate(0," + nationsTrendHeight + ")")
         .call(d3.axisBottom(x))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(285, 33)")
+        .text("Date");
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(-48, 140) rotate(-90)")
+        .text("# Tweets");
 
 
+    colori = []
     // at the start of the webapp select all the nations that are in selectedNation
     selectedNations.forEach((nation, i) => {
         d3.select(`#trend-${nation}`)
             .style("stroke", `${selectionColors[i%selectionColors.length]}`);
 
-        d3.select(`#trend-${nation}`)
+        d3.select(`#trend-${nation}`).raise()
+        colori.push(selectionColors[i%selectionColors.length])
     })
+
+    legendnat.selectAll("*").remove();
+    insertLegendNat()
 
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
@@ -1332,4 +1347,86 @@ function deleteAVG() {
 
 function toFixedIfNecessary(value, dp) {
     return +parseFloat(value).toFixed(dp);
+}
+
+var colors = ["rgb(101, 119, 134)", "rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]//[new Color(247, 251, 255), new Color(247, 251, 255), new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255)]
+
+function insertLegend() {
+    var legendText = ["# Tweets", "0-10", "11-50", "51-100", "101-300", "301-500", "501-1000", "1001-2000", "2001-5000", "5001-10000", "10001+"];
+    var legendsvg = d3.select("#legenda-svg")
+    var legend = legendsvg.append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("class", "legend")
+        .selectAll("g")
+        .data(legendText)
+        .enter()
+        .append("g")
+        .attr("transform", function (d, i) {
+            return "translate(0," + i * 20 + ")";
+        });
+
+    legend.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", function (d, i) {
+            var color = colors[i];
+            return color;
+        });
+
+    legend.append("text")
+        .data(legendText)
+        .attr("x", 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text(function (d) {
+            return d;
+        })
+        .style("font-weight", function (d, i) {
+            if (i == 0)
+                return "bold"
+        });
+}
+
+var legendnat;
+function insertLegendNat() {
+    console.log("sto dentro")
+    var nat = []
+    var index =[]
+
+    console.log(selectedNations)
+    for (var i = 0; i < selectedNations.length; i++) {
+        if(selectedNations[i])
+            nat.push(selectedNations[i])
+    }
+    
+    legendnat = d3.select("#legenda-nat")
+    var legend1 = legendnat.append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("class", "legend")
+        .selectAll("g")
+        .data(nat)
+        .enter()
+        .append("g")
+        .attr("transform", function (d, i) {
+            return "translate(0," + i * 20 + ")";
+        });
+
+    legend1.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", function (d, i) {
+            coloree = colori[i]
+            return coloree
+        });
+
+    legend1.append("text")
+        .data(nat)
+        .attr("x", 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text(function (d) {
+            return d;
+        })
 }
