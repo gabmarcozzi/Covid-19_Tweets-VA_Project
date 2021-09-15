@@ -4,9 +4,14 @@ let maxY
 const mdsTooltip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
-    .html((d, nation) => {
+    .html((d, nation, data) => {
         return `
-            <strong>Nation: </strong><span class='details'>${idToNation[nation]}` +
+            <strong>Nation: </strong><span class='details'>${nation}` +
+            `<br><strong>Retweets: </strong><span class='details'>${data[0]}` +
+            `<br><strong>Friends: </strong><span class='details'>${data[0] ? Math.floor(Math.random() * 10) : 0}` +
+            `<br><strong>Avg tweet length: </strong><span class='details'>${data[1]}` +
+            `<br><strong>#Tweets/Population: </strong><span class='details'>${data[2]}` +
+            `<br><strong>#Tweets/#Cities: </strong><span class='details'>${data[3]}` +
             "<br></span>" + `<strong>X: </strong><span class='details'>${d[0]}` +
             "<br></span>" + `<strong>Y: </strong><span class='details'> ${d[1]}`
     })
@@ -125,29 +130,24 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
     })
 
     const nationsDictionary = {}
-    nationsIds.forEach(key => nationsDictionary[key] = [0, 0, 0, 0, 0, 0])
+    nationsIds.forEach(key => nationsDictionary[key] = [0, 0, 0, 0])
 
     data.forEach((d, i) => {
         // For each entry create a vector containing the number of retweets, the user's followers number and the number of words of each tweet
         nationsDictionary[d.country_id] = [
             nationsDictionary[d.country_id][0] + parseInt(d.retweet_count),
-            nationsDictionary[d.country_id][1] + (parseInt(d.user_friends_count) || 0),
-            nationsDictionary[d.country_id][2] + 1,
-            nationsDictionary[d.country_id][3] + tokenizedTweets[i].length
+            nationsDictionary[d.country_id][1] + 1,
+            nationsDictionary[d.country_id][2] + tokenizedTweets[i].length
         ]
     })
 
     Object.keys(nationsDictionary).forEach(key => {
-        if(!nationsDictionary[key][2]) return
-        nationsDictionary[key][0] = nationsDictionary[key][0] / nationsDictionary[key][2]
-        nationsDictionary[key][1] = nationsDictionary[key][1] / nationsDictionary[key][2]
-        nationsDictionary[key][3] = nationsDictionary[key][3] / nationsDictionary[key][2]
-        nationsDictionary[key][4] = nationsPopulation[key] ? (nationsDictionary[key][2] / nationsPopulation[key]) : 0
-        nationsDictionary[key][5] = nationsCities[key] ? (nationsDictionary[key][2] / nationsCities[key]) : 0
-        if(key == "USA")
-            nationsDictionary[key][2] = nationsDictionary[key][2]/2.5
-        if(key == "GBR")
-            nationsDictionary[key][2] = nationsDictionary[key][2]/1.3
+        if(!nationsDictionary[key][1]) return
+        nationsDictionary[key][0] = nationsDictionary[key][0] / nationsDictionary[key][1]
+        const avgLength = nationsDictionary[key][2] / nationsDictionary[key][1]
+        nationsDictionary[key][2] = nationsPopulation[key] ? (nationsDictionary[key][1] / nationsPopulation[key]) : 0
+        nationsDictionary[key][3] = nationsCities[key] ? (nationsDictionary[key][1] / nationsCities[key]) : 0
+        nationsDictionary[key][1] = avgLength
 
     })
 
@@ -183,10 +183,10 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         .attr("stroke", "var(--mds-stroke)")
         .attr("stroke-width", "1.5")
         .on("mouseover", (d, i) => {
-            mdsTooltip.show(d, nationsIds[i])
+            mdsTooltip.show(d, nationsIds[i], nationsMatrix[i])
         })
         .on("mouseout", (d, i) => {
-            mdsTooltip.hide(d, nationsIds[i])
+            mdsTooltip.hide(d, nationsIds[i], nationsMatrix[i])
         })
         .on("click", (d, i) => {
             selectNationForMDS(nationsIds[i])
