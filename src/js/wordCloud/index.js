@@ -22,7 +22,7 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
 
     const wordFrequencies = {}
     // Empty global tokenized tweets list
-    tokenizedTweets = []
+    const tokenizedTweets = []
 
     if (start && end) {
         data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))

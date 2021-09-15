@@ -50,28 +50,24 @@ const mouseEventHandler = (event) => {
 }
 
 function updateWorldMap(start, end) {
-    if(!dbclick) {
-        Object.assign(tweetsByCountryId, initialTweets)
-    }
-    else {
-        const s = new Date(start)
-        const e = new Date(end)
+    Object.assign(tweetsByCountryId, initialTweets)
+    const s = new Date(start)
+    const e = new Date(end)
 
-        ende = new Date(e.getFullYear(), e.getMonth()+1, 1);
-        ende.setDate(en.getDate() - 1)
-        ende.setHours(23,59,00)
+    ende = new Date(e.getFullYear(), e.getMonth()+1, 1);
+    ende.setDate(en.getDate() - 1)
+    ende.setHours(23,59,00)
 
-        Object.entries(tweetsByCountryId).forEach(([nation, tweets]) => {
-            tw = []
-            tweets.forEach(t => {
-                const curr = new Date(t.created_at)
-                if(curr >= s && curr <= ende) {
-                    tw.push(t)
-                }
-            })
-            tweetsByCountryId[nation] = tw
+    Object.entries(tweetsByCountryId).forEach(([nation, tweets]) => {
+        tw = []
+        tweets.forEach(t => {
+            const curr = new Date(t.created_at)
+            if(curr >= s && curr <= ende) {
+                tw.push(t)
+            }
         })
-    }
+        tweetsByCountryId[nation] = tw
+    })
 
 
     const selectNationForMap = function(d) {selectNation(d.id)}

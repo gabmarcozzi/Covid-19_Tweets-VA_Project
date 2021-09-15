@@ -113,6 +113,17 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         data = data.filter(d => moment(d.created_at).isBefore(moment(end)) && moment(d.created_at).isAfter(moment(start)))
     }
 
+    const tokenizedTweets = []
+
+    data.forEach(d => {
+        let tweet = d.text
+
+        // tokenize the sentence
+        const tokenizedTweet = tweet.split(' ')
+
+        tokenizedTweets.push(tokenizedTweet)
+    })
+
     const nationsDictionary = {}
     nationsIds.forEach(key => nationsDictionary[key] = [0, 0, 0, 0, 0, 0])
 

@@ -225,51 +225,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
 
         updateWorldMap(st, en)
         updateNationPlot(st, en)
+
         updateMDS(data, st, en)
         updateWordCloud(data, st, en)
-
-        // Update axis and area position
-        // ciao.transition().duration(1000).call(d3.axisBottom(xAxis))
-        // area
-        //     .select('.myArea')
-        //     .transition()
-        //     .duration(1000)
-        //     .attr("d", areaGenerator)
-
-        // timeTrendPlot.selectAll(".tp-circle")
-        //     .remove()
-
-        // timeTrendPlot.selectAll("dots")
-        //     .data([dataPath])
-        //     .enter()
-        //     .append('g')
-        //     .style("fill", "var(--points-color)")
-        //     .selectAll("myPoints")
-        //     .data(function (d) {
-        //         return d;
-        //     })
-        //     .enter()
-        //     .append("circle")
-        //     .attr('class', 'tp-circle')
-        //     .transition()
-        //     .attr("cx", function (d) {
-        //         return xAxis(d['date'])
-        //     })
-        //     .attr("cy", function (d) {
-        //         return yAxis(d['close'])
-        //     })
-        //     .attr("r", 6)
-        //     .attr("stroke", "black")
-        //     .attr("fill", "var(--points-color)")
-        //     .duration(1000)
-
-        // timeTrendPlot.selectAll(".tp-circle")
-        //     .on("mouseover", (d) => {
-        //         timeTooltip.show(d)
-        //     })
-        //     .on("mouseout", function (d) {
-        //         timeTooltip.hide(d)
-        //     })
 
         // plot loaded notification
         const loaded = new Event('loaded')
@@ -288,8 +246,9 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             endInterval = null
             updateWorldMap("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
             updateNationPlot("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)", "Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)")
-            updateWordCloud(data)
             updateMDS(data)
+            updateWordCloud(data)
+
             xAxis.domain(d3.extent(flattenedData, d => d['date']))
             //ciao.transition().call(d3.axisBottom(xAxis))
 
