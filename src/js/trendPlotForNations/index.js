@@ -44,8 +44,8 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("div")
     .append("svg")
     .attr("width", "100%")
-    .attr("height", "90%")
-    .attr("viewBox", "0 0 800 400")
+    .attr("height", "100%")
+    .attr("viewBox", "-10 20 800 400")
     .append("g")
     .attr("transform",
         "translate(" + nationsTrendMargin.left + "," + nationsTrendMargin.top + ")")
@@ -185,10 +185,20 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
     nationsTrendPlot.append("g")
         .attr("transform", "translate(0," + nationsTrendHeight + ")")
         .call(d3.axisBottom(x))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(350, 33)")
+        .text("Date");
 
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(-48, 140) rotate(-90)")
+        .text("# Tweets");
 
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)

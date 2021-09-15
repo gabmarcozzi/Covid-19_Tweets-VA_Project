@@ -943,9 +943,19 @@ function updateNationPlot(start, end, dispatchEvent = true) {
     nationsTrendPlot.append("g")
         .attr("transform", "translate(0," + nationsTrendHeight + ")")
         .call(d3.axisBottom(x))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(350, 33)")
+        .text("Date");
     // Add the Y Axis
     nationsTrendPlot.append("g")
         .call(d3.axisLeft(y))
+        .append("text")
+        .attr("class", "text1")
+        .attr("fill", "black")//set the fill here
+        .attr("transform","translate(-48, 140) rotate(-90)")
+        .text("# Tweets");
 
 
     // at the start of the webapp select all the nations that are in selectedNation

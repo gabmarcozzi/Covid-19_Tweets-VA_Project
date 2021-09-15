@@ -73,8 +73,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .append("text")
         .attr("class", "text1")
         .attr("fill", "black")//set the fill here
-        .attr("transform","translate(500, 30)")
-        .text("Hello World!!!");
+        .attr("transform","translate(325, 35)")
+        .text("Date");
 
     // Add the Y Axis
     timeTrendPlot.append("g")
@@ -82,8 +82,8 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .append("text")
         .attr("class", "text1")
         .attr("fill", "black")//set the fill here
-        .attr("transform","translate(-45, 80) rotate(-90)")
-        .text("Hello Worlryerd!!!");
+        .attr("transform","translate(-48, 80) rotate(-90)")
+        .text("# Tweets");
 
     // Add a clipPath: everything out of this area won't be drawn.
     var clip = timeTrendPlot.append("defs").append("svg:clipPath")
@@ -291,7 +291,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
             updateWordCloud(data)
             updateMDS(data)
             xAxis.domain(d3.extent(flattenedData, d => d['date']))
-            ciao.transition().call(d3.axisBottom(xAxis))
+            //ciao.transition().call(d3.axisBottom(xAxis))
 
             area
                 .select('.myArea')
