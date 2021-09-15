@@ -200,6 +200,13 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .attr("transform","translate(-48, 140) rotate(-90)")
         .text("# Tweets");
 
+    selectedNations.forEach((nation, i) => {
+        const selectionColor = selectionColors[i%selectionColors.length]
+        d3.select(`#trend-${nation}`)
+            .style("stroke", `${selectionColor}`)
+        d3.select(`#trend-${nation}`).raise()
+    })
+
     Object.entries(dataPaths).forEach(([key, value]) => {
         value.sort(sortByDate)
 
@@ -224,12 +231,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
                 nationTooltipDot.hide(d, idToNation[key])
             })
         }
-    })
-
-    selectedNations.forEach((nation, i) => {
-        const selectionColor = selectionColors[i%selectionColors.length]
-        d3.select(`#trend-${nation}`)
-            .style("stroke", `${selectionColor}`)
     })
 
     // plot loaded notification
