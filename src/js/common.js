@@ -1131,19 +1131,19 @@ function updateButtons() {
 
     if (count > 1) {
         $("#button-sum")
-            .addClass('mds-button')
+            .addClass('sum-button')
             .prop('disabled', false)
 
         $("#button-avg")
-            .addClass('mds-button')
+            .addClass('avg-button')
             .prop('disabled', false)
     } else {
         $("#button-sum")
-            .removeClass('mds-button')
+            .removeClass('sum-button')
             .prop('disabled', true)
 
         $("#button-avg")
-            .removeClass('mds-button')
+            .removeClass('avg-button')
             .prop('disabled', true)
     }
 }
