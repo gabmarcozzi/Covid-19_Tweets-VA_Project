@@ -1430,3 +1430,25 @@ function insertLegendNat() {
             return d;
         })
 }
+
+const nationsPopulation = {}
+const nationsCities = []
+
+// region Load data from other datasets
+d3.tsv("http://localhost:3000/world_population.tsv", (error, data) => {
+    if(error) return
+
+    data.forEach(d => {
+        nationsPopulation[d.id] = d.population ? parseInt(d.population) : 0
+    })
+})
+
+d3.csv("http://localhost:3000/cities.csv", (error, data) => {
+    if(error) return
+
+    data.forEach(d => {
+        nationsCities[d.id] = d.city ? parseInt(d.city) : 0
+    })
+})
+
+// endregion

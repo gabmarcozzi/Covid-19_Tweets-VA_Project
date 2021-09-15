@@ -114,7 +114,7 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
     }
 
     const nationsDictionary = {}
-    nationsIds.forEach(key => nationsDictionary[key] = [0, 0, 0, 0])
+    nationsIds.forEach(key => nationsDictionary[key] = [0, 0, 0, 0, 0, 0])
 
     data.forEach((d, i) => {
         // For each entry create a vector containing the number of retweets, the user's followers number and the number of words of each tweet
@@ -124,6 +124,15 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
             nationsDictionary[d.country_id][2] + 1,
             nationsDictionary[d.country_id][3] + tokenizedTweets[i].length
         ]
+    })
+
+    Object.keys(nationsDictionary).forEach(key => {
+        if(!nationsDictionary[key][2]) return
+        nationsDictionary[key][0] = nationsDictionary[key][0] / nationsDictionary[key][2]
+        nationsDictionary[key][1] = nationsDictionary[key][1] / nationsDictionary[key][2]
+        nationsDictionary[key][3] = nationsDictionary[key][3] / nationsDictionary[key][2]
+        nationsDictionary[key][4] = nationsPopulation[key] ? (nationsDictionary[key][2] / nationsPopulation[key]) : 0
+        nationsDictionary[key][5] = nationsCities[key] ? (nationsDictionary[key][2] / nationsCities[key]) : 0
     })
 
     const nationsMatrix = Object.values(nationsDictionary)
