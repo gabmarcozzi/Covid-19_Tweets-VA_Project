@@ -196,7 +196,7 @@ function conv(x) {
 
 const nationsIds = Object.keys(idToNation)
 
-const selectedNations = ['USA', 'GBR', 'IND']
+const selectedNations = ['USA', 'ITA', 'ESP', 'FRA', 'DEU', 'POL']
 
 dataPaths = {}
 const selectNation = (key) => {
@@ -750,7 +750,7 @@ var valueline = d3.line()
     .y(d => y(d['close']))
 
 const flattenedData = [];
-var colori = ['#b15928', '#ffff99', '#6a3d9a']
+var colori = selectionColors.slice(0,9)
 function updateNationPlot(start, end, dispatchEvent = true) {
     var bool = false;
     if (new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
@@ -1332,7 +1332,7 @@ function toFixedIfNecessary(value, dp) {
     return +parseFloat(value).toFixed(dp);
 }
 
-var colors = ["rgb(101, 119, 134)", "rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]//[new Color(247, 251, 255), new Color(247, 251, 255), new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255),new Color(247, 251, 255)]
+var colors = ["rgb(101, 119, 134)", "rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"]
 
 function insertLegend() {
     var legendText = ["# Tweets", "0-10", "11-50", "51-100", "101-300", "301-500", "501-1000", "1001-2000", "2001-5000", "5001-10000", "10001+"];
