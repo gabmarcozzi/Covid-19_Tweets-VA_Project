@@ -209,9 +209,6 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         en = new Date(e.getFullYear(), e.getMonth(), 1)
         en.setHours(00, 00, 00)
 
-        console.log(st)
-        console.log(en)
-
         if(Math.abs(st.getMonth() - en.getMonth()) < 1) throw Error()
 
         return [st, en]

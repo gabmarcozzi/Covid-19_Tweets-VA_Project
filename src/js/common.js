@@ -251,6 +251,11 @@ const selectNation = (key) => {
             .duration(500)
             .style("fill", `${selectionColor}`)
     }
+
+    selectedNations.forEach(n => {
+        d3.select(`#point-${n}`).raise()
+    })
+    
     updateButtons()
     updateNationPlot(x.domain()[0], x.domain()[1], false)
 }
@@ -889,10 +894,6 @@ function updateNationPlot(start, end, dispatchEvent = true) {
     })
 
     if (sum) {
-        console.log("sto per printare la sum function")
-        console.log("sumHeight: " + sumHeight)
-        console.log("nationSUM: " + nationSUM)
-        console.log("sumPath: " + sumPath)
         nationsTrendPlot.append("path")
             .data([sumPath])
             .attr("class", "line-sum")
@@ -915,10 +916,6 @@ function updateNationPlot(start, end, dispatchEvent = true) {
     }
 
     if (avg) {
-        console.log("sto per printare la avg function")
-        console.log("avgHeight: " + sumHeight)
-        console.log("nationAVG: " + nationSUM)
-        console.log("avgPath: " + sumPath)
         nationsTrendPlot.append("path")
             .data([avgPath])
             .attr("class", "line-avg")
@@ -946,7 +943,7 @@ function updateNationPlot(start, end, dispatchEvent = true) {
         .append("text")
         .attr("class", "text1")
         .attr("fill", "black")//set the fill here
-        .attr("transform","translate(285, 33)")
+        .attr("transform","translate(318, 33)")
         .text("Date");
     // Add the Y Axis
     nationsTrendPlot.append("g")
@@ -1170,22 +1167,18 @@ var sumPath = []
 var sumButtonClicked = false
 
 function initializeSUM() {
-    console.log("initializeSUM() called")
     var ab = []
     if (sumButtonClicked) {
         nationSUM = []
         sumPath = []
     }
     if (nationSUM.length == 0) {
-        console.log("dataPaths: " + dataPaths)
         Object.entries(dataPaths).forEach(([key, value]) => {
             if (selectedNations.includes(key)) {
                 nationSUM.push(key)
-                console.log("value: " + value)
                 value.forEach(v => {
                     dataInside = new Date(v['date'])
                     if (dataInside >= x.domain()[0] && dataInside <= x.domain()[1]) {
-                        console.log("v: " + v)
                         ab.push(v);
                     }
                 })
@@ -1213,7 +1206,6 @@ function initializeSUM() {
         }
     })
 
-    console.log(variable)
     sumPath = []
     Object.entries(variable).forEach(([month, value]) => {
         if (month != 0) {
@@ -1233,15 +1225,12 @@ function initializeSUM() {
 
         sumPath.push(insert)
     }
-    console.log(sumPath)
 
     sumHeight = 0
     sumPath.forEach(elem => {
         if (elem['close'] > sumHeight)
             sumHeight = elem['close']
     })
-
-    console.log("sumHeight in initializeSUM(): " + sumHeight)
 }
 
 function deleteSUM() {
@@ -1259,22 +1248,18 @@ var avgPath = []
 var avgButtonClicked = false
 
 function initializeAVG() {
-    console.log("initializeAVG() called")
     var ab = []
     if (avgButtonClicked) {
         nationAVG = []
         avgPath = []
     }
     if (nationAVG.length == 0) {
-        console.log("dataPaths: " + dataPaths)
         Object.entries(dataPaths).forEach(([key, value]) => {
             if (selectedNations.includes(key)) {
                 nationAVG.push(key)
-                console.log("value: " + value)
                 value.forEach(v => {
                     dataInside = new Date(v['date'])
                     if (dataInside >= x.domain()[0] && dataInside <= x.domain()[1]) {
-                        console.log("v: " + v)
                         ab.push(v);
                     }
                 })
@@ -1333,8 +1318,6 @@ function initializeAVG() {
         if (elem['close'] > avgHeight)
             avgHeight = elem['close']
     })
-
-    console.log("avgHeight in initializeSUM(): " + avgHeight)
 }
 
 function deleteAVG() {
@@ -1390,11 +1373,8 @@ function insertLegend() {
 
 var legendnat;
 function insertLegendNat() {
-    console.log("sto dentro")
     var nat = []
-    var index =[]
 
-    console.log(selectedNations)
     for (var i = 0; i < selectedNations.length; i++) {
         if(selectedNations[i])
             nat.push(selectedNations[i])

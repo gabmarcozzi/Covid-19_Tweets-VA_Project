@@ -144,6 +144,11 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         nationsDictionary[key][3] = nationsDictionary[key][3] / nationsDictionary[key][2]
         nationsDictionary[key][4] = nationsPopulation[key] ? (nationsDictionary[key][2] / nationsPopulation[key]) : 0
         nationsDictionary[key][5] = nationsCities[key] ? (nationsDictionary[key][2] / nationsCities[key]) : 0
+        if(key == "USA")
+            nationsDictionary[key][2] = nationsDictionary[key][2]/2.5
+        if(key == "GBR")
+            nationsDictionary[key][2] = nationsDictionary[key][2]/1.3
+
     })
 
     const nationsMatrix = Object.values(nationsDictionary)
@@ -192,6 +197,7 @@ const updateMDS = (data, start = null, end = null, dispatchLoaded = true) => {
         const selectionColor = selectionColors[i%selectionColors.length]
         d3.select(`#point-${nation}`)
             .style("fill", `${selectionColor}`)
+        d3.select(`#point-${nation}`).raise()
     })
 
     if(dispatchLoaded){
