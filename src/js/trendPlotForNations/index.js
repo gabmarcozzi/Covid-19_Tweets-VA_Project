@@ -45,7 +45,7 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
-    .attr("viewBox", "15 15 660 455")
+    .attr("viewBox", "15 15 660 460")
     .append("g")
     .attr("transform",
         "translate(" + nationsTrendMargin.left + "," + nationsTrendMargin.top + ")")

@@ -1417,8 +1417,8 @@ function insertLegendNat() {
         .attr("width", 18)
         .attr("height", 18)
         .style("fill", function (d, i) {
-            color = colori[i]
-            return color
+            coloree = colori[i]
+            return coloree
         });
 
     legend1.append("text")
