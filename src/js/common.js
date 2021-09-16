@@ -196,7 +196,7 @@ function conv(x) {
 
 const nationsIds = Object.keys(idToNation)
 
-const selectedNations = ['USA', 'ITA', 'ESP', 'FRA', 'DEU', 'POL']
+const selectedNations = ['USA', 'GBR', 'IND']
 
 dataPaths = {}
 const selectNation = (key) => {
@@ -750,7 +750,7 @@ var valueline = d3.line()
     .y(d => y(d['close']))
 
 const flattenedData = [];
-var colori = selectionColors.slice(0,9)
+var colori = selectionColors.slice(0,3)
 function updateNationPlot(start, end, dispatchEvent = true) {
     var bool = false;
     if (new Date(start).getTime() == new Date("Thu Mar 19 2020 00:00:00 GMT+0200 (Ora standard dell’Europa centrale)").getTime() && new Date(end).getTime() == new Date("Sat Jan 30 2021 21:25:18 GMT+0100 (Ora standard dell’Europa centrale)").getTime()) {
