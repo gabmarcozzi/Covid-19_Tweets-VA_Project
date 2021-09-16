@@ -14,7 +14,7 @@ const updateWordCloud = (data, start = null, end = null, dispatchLoaded = true) 
         .attr("id", "wordCloudPlot")
         .attr("width", "100%")
         .attr("height", "100%")
-        .attr("viewBox", "0 0 370 300")
+        .attr("viewBox", "0 0 360 285")
         .append("g")
         .attr("transform",
             "translate(" + wordCloudMargin.left + "," + wordCloudMargin.top + ")")

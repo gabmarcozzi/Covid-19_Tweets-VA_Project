@@ -45,7 +45,7 @@ nationsTrendPlot = d3.select("#nationsTrendPlot")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "95%")
-    .attr("viewBox", "15 15 660 415")
+    .attr("viewBox", "-15 15 670 380")
     .append("g")
     .attr("transform",
         "translate(" + nationsTrendMargin.left + "," + nationsTrendMargin.top + ")")
@@ -188,7 +188,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .append("text")
         .attr("class", "text1")
         .attr("fill", "black")//set the fill here
-        .attr("transform","translate(318, 33)")
+        .attr("transform","translate(285, 33)")
         .text("Date");
 
     // Add the Y Axis

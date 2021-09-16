@@ -25,7 +25,7 @@ const timeTrendPlot = d3.select("#timeTrendPlot")
     .attr("width", "100%")
     .attr("height", "100%")
     //.attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "-40 0 750 300")
+    .attr("viewBox", "-40 0 680 260")
     // Class to make it responsive.
     //.classed("svg-content-responsive", true)
     .append("g")
@@ -73,7 +73,7 @@ d3.csv("http://localhost:3000/covidTweetsDataset.csv", (error, data) => {
         .append("text")
         .attr("class", "text1")
         .attr("fill", "black")//set the fill here
-        .attr("transform","translate(325, 35)")
+        .attr("transform","translate(290, 35)")
         .text("Date");
 
     // Add the Y Axis
